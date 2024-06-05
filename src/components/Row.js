@@ -1,17 +1,21 @@
-import React,{useState} from 'react';
+import React,{useState,useEffect} from 'react';
 import { useDispatch } from 'react-redux';
 import { selectRow } from '../reduxStore/calendarSlice';
 import { FaRegTrashCan } from "react-icons/fa6";
 
-const Row = ({ data,count,index,onDelete }) => {
+const Row = ({ data,count,index,onDelete, check }) => {
     const dispatch = useDispatch();
     const [isSelected, setIsSelected] = useState(false);
 
     const handleClick = () => {
-        dispatch(selectRow({ index })); 
+        console.log(data,"612: data")
+        dispatch(selectRow({ index,data })); 
         setIsSelected(!isSelected); // 
       };
   
+      useEffect(() => {
+        setIsSelected(check); // Set isSelected based on received check prop
+      }, [check]);
 
   const styles = {
     td: {
@@ -24,7 +28,7 @@ const Row = ({ data,count,index,onDelete }) => {
   return (
     <tr>
       <td style={styles.td}>
-        <input type="checkbox" onClick={handleClick} />
+        <input type="checkbox" onClick={handleClick} checked={ isSelected}/>
       </td>
       <td style={styles.td}>{count}</td>
       <td style={styles.td}>{data.date}</td>
