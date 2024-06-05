@@ -12,7 +12,7 @@ const groupByDateAndSumValue = (rows) => {
   const groupedData = {};
 
   for (const row of rows) {
-    const date = row.date; // Assuming 'date' and 'value' are properties in your row object
+    const date = row.date;
     const value = Number(row.value);
 
     if (groupedData.hasOwnProperty(date)) {
@@ -28,23 +28,41 @@ const groupByDateAndSumValue = (rows) => {
 
 const Table = () => {
   const [showChart, setShowChart] = useState(false);
-  const [check, setCheck] = useState(false);
-  const dispatch = useDispatch();
+  const [checkedItems, setCheckedItems] = useState({});
 
+  const dispatch = useDispatch();
   const { rows, selectedRows } = useSelector((store) => store.calendar);
 
-  const dataSets = groupByDateAndSumValue(rows); // Calculate data sets from rows
+  const handleCheckboxChange = (rowIndex, isChecked) => {
+    setCheckedItems((prevItems) => ({
+      ...prevItems,
+      [rowIndex]: isChecked,
+    }));
+  };
 
-  console.log(selectedRows, "712: selected Rows");
+  const dataSets = groupByDateAndSumValue(rows);
+
   const handleDelete = (index) => {
     dispatch(deleteRow({ index }));
   };
 
+  const tableRows = rows.map((item, index) => (
+    <Row
+      key={index}
+      data={item}
+      count={index + 1}
+      index={index}
+      isChecked={!!checkedItems[index]}
+      onDelete={handleDelete}
+      onChange={handleCheckboxChange}
+    />
+  ));
+
   const handleChart = () => {
     setShowChart(true);
-    setCheck(false); // Clear selection
-    dispatch(chartData(dataSets)); // Dispatch action with data sets
-    dispatch(clearSelectedRow()); // Clear selected rows
+    dispatch(chartData(dataSets));
+    dispatch(clearSelectedRow());
+    setCheckedItems({});
   };
 
   const styles = {
@@ -77,21 +95,9 @@ const Table = () => {
             <th style={styles.th}>action</th>
           </tr>
         </thead>
-        <tbody>
-          {rows.map((row, index) => (
-            <Row
-              key={row.id || index} // Use a unique key for rows
-              data={row}
-              count={index + 1}
-              index={index}
-              onDelete={handleDelete}
-              check={check}
-            />
-          ))}
-        </tbody>
+        <tbody>{tableRows}</tbody>
       </table>
       {showChart && <Chart3 />}
-      {/* Conditionally render Chart */}
     </div>
   );
 };

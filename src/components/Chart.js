@@ -45,14 +45,12 @@ const Chart3 = () => {
     };
   };
 
-  const chartData = createChartData(dataSet); // Use optional function or create data directly
+  const chartData = createChartData(dataSet);
   console.log(chartData, "911:chart data");
 
-  const options = {
-    // Optional chart configuration options
-    // You can customize these options for specific chart behaviors
-    // Refer to Chart.js documentation for available options: https://www.chartjs.org/docs/latest/
-  };
+  //   const options = {
+
+  //   };
 
   return (
     <div>
