@@ -9,7 +9,7 @@ const Row = ({ data, count, index, onDelete, onChange, isChecked }) => {
 
   const handleClick = () => {
     dispatch(selectRow({ index, data }));
-    onChange(index, !isChecked); // Pass the new state to the parent
+    onChange(index, !isChecked);
   };
 
   const styles = {

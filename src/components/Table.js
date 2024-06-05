@@ -1,12 +1,24 @@
-import React, { useState } from "react";
+import React, { useMemo, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import {
   chartData,
   clearSelectedRow,
   deleteRow,
-} from "../reduxStore/calendarSlice"; // Import actions
+} from "../reduxStore/calendarSlice";
 import Row from "./Row";
-import Chart3 from "./Chart"; // Import Chart component
+import ChartComp from "./Chart";
+
+const styles = {
+  table: {
+    borderCollapse: "collapse",
+    width: "100%",
+  },
+  th: {
+    padding: "8px",
+    border: "1px solid #ddd",
+    textAlign: "left",
+  },
+};
 
 const groupByDateAndSumValue = (rows) => {
   const groupedData = {};
@@ -33,6 +45,8 @@ const Table = () => {
   const dispatch = useDispatch();
   const { rows, selectedRows } = useSelector((store) => store.calendar);
 
+  //handle overall change in checkbox so that clear all
+  //or operation on all checkboxes will be easy
   const handleCheckboxChange = (rowIndex, isChecked) => {
     setCheckedItems((prevItems) => ({
       ...prevItems,
@@ -40,12 +54,16 @@ const Table = () => {
     }));
   };
 
-  const dataSets = groupByDateAndSumValue(rows);
+  //make row data for dataSet so that forward this data to chart
+  //when click on make chart button
+  const rowData = selectedRows.map((index) => rows[index]);
+  const dataSets = useMemo(() => groupByDateAndSumValue(rowData), [rowData]);
 
   const handleDelete = (index) => {
     dispatch(deleteRow({ index }));
   };
 
+  //render rows according to the data
   const tableRows = rows.map((item, index) => (
     <Row
       key={index}
@@ -63,18 +81,6 @@ const Table = () => {
     dispatch(chartData(dataSets));
     dispatch(clearSelectedRow());
     setCheckedItems({});
-  };
-
-  const styles = {
-    table: {
-      borderCollapse: "collapse",
-      width: "100%",
-    },
-    th: {
-      padding: "8px",
-      border: "1px solid #ddd",
-      textAlign: "left",
-    },
   };
 
   return (
@@ -97,7 +103,7 @@ const Table = () => {
         </thead>
         <tbody>{tableRows}</tbody>
       </table>
-      {showChart && <Chart3 />}
+      {showChart && <ChartComp setShowPieChart={setShowChart} />}
     </div>
   );
 };

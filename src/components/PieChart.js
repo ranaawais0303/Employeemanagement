@@ -1,4 +1,4 @@
-import React, { useRef } from "react";
+import React, { useRef, useEffect } from "react";
 import { Pie } from "react-chartjs-2";
 import * as htmlToImage from "html-to-image";
 
@@ -9,8 +9,24 @@ const createFileName = (extension = "", ...names) => {
   return `${names.join("")}.${extension}`;
 };
 
-function PieChart({ chartData }) {
+function PieChart({ chartData, setShowPieChart }) {
   const screenshotArea = useRef(null); // Reference for chart canvas
+
+  //   const handleClickOutside = (event) => {
+  //     if (
+  //       screenshotArea.current &&
+  //       !screenshotArea.current.contains(event.target)
+  //     ) {
+  //       setShowPieChart(false);
+  //     }
+  //   };
+
+  //   useEffect(() => {
+  //     document.addEventListener("click", handleClickOutside, true);
+  //     return () => {
+  //       document.removeEventListener("click", handleClickOutside, true);
+  //     };
+  //   }, []);
 
   const downloadFile = (
     image,

@@ -1,30 +1,28 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect } from "react";
 import { CategoryScale } from "chart.js";
-// import { Pie } from "react-chartjs-2"; // Import Pie chart component
 import Chart from "chart.js/auto";
 import PieChart from "./PieChart";
 import { useSelector } from "react-redux";
 
-const Chart3 = () => {
-  const [groupedData, setGroupedData] = useState({}); // Empty object initially
+const ChartComp = ({ setShowPieChart }) => {
   const { dataSet } = useSelector((store) => store.calendar);
 
   useEffect(() => {
-    Chart.register(CategoryScale); // Register ArcElement
+    Chart.register(CategoryScale);
   }, []);
-  // Function for generating chart data (optional, for better organization)
+
+  // in this set the data for chart that type of data required for chart
   const createChartData = (dataSet) => {
-    const labels = Object.keys(dataSet || groupedData); // Use dataSets if available, otherwise fallback
-    const values = Object.values(dataSet || groupedData).map(
-      (item) => item.total
-    );
-    console.log(labels, values, "912: labels and values");
+    const labels = Object.keys(dataSet);
+    const values = Object.values(dataSet).map((item) => item.total);
+
     return {
       labels,
       datasets: [
         {
           label: "Total Value by Date",
           data: values,
+
           backgroundColor: [
             "rgba(255, 99, 132, 0.2)", // Light red
             "rgba(54, 162, 235, 0.2)", // Light blue
@@ -32,6 +30,7 @@ const Chart3 = () => {
             "rgba(75, 192, 192, 0.2)", // Light green
             "rgba(153, 102, 255, 0.2)", // Light blue
           ],
+
           borderColor: [
             "rgba(255, 99, 132, 1)", // Red
             "rgba(54, 162, 235, 1)", // Blue
@@ -39,6 +38,7 @@ const Chart3 = () => {
             "rgba(75, 192, 192, 1)", // Green
             "rgba(153, 102, 255, 1)", // Blue
           ],
+
           borderWidth: 1,
         },
       ],
@@ -46,17 +46,12 @@ const Chart3 = () => {
   };
 
   const chartData = createChartData(dataSet);
-  console.log(chartData, "911:chart data");
-
-  //   const options = {
-
-  //   };
 
   return (
     <div>
-      <PieChart chartData={chartData} />
+      <PieChart chartData={chartData} setShowPieChart={setShowPieChart} />
     </div>
   );
 };
 
-export default Chart3;
+export default ChartComp;
