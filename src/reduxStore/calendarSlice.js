@@ -19,11 +19,33 @@ const calendarSlice = createSlice({
       state.value = action.payload;
     },
 
+    clearCheck: (state, action) => {
+      state.selectedRows = state.selectedRows.filter(
+        (selectedIndex) => selectedIndex !== action.payload
+      );
+    },
+
     addRow: (state, action) => {
-      // state.rows.push(action.payload);
-      state.rows.push({ date: state.selectedDate, value: state.value });
-      state.selectedDate = "";
-      state.value = "";
+      if (action.payload || action.payload === 0) {
+        const index =
+          typeof action?.payload === "number"
+            ? action?.payload
+            : action?.payload.index;
+
+        state.rows = state.rows.map((row, i) => {
+          if (i === index) {
+            return { date: state.selectedDate, value: state.value };
+          } else {
+            return row;
+          }
+        });
+        state.selectedDate = "";
+        state.value = "";
+      } else {
+        state.rows.push({ date: state.selectedDate, value: state.value });
+        state.selectedDate = "";
+        state.value = "";
+      }
     },
 
     selectRow: (state, action) => {
@@ -55,6 +77,7 @@ const calendarSlice = createSlice({
     },
   },
 });
+
 export const {
   addRow,
   selectRow,
@@ -63,5 +86,6 @@ export const {
   clearSelectedRow,
   selectDate,
   addValue,
+  clearCheck,
 } = calendarSlice.actions;
 export default calendarSlice.reducer;

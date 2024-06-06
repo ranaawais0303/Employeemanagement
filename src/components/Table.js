@@ -1,9 +1,12 @@
 import React, { useMemo, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import {
+  addValue,
   chartData,
   clearSelectedRow,
   deleteRow,
+  selectDate,
+  clearCheck,
 } from "../reduxStore/calendarSlice";
 import Row from "./Row";
 import ChartComp from "./Chart";
@@ -38,7 +41,7 @@ const groupByDateAndSumValue = (rows) => {
   return groupedData;
 };
 
-const Table = () => {
+const Table = ({ setIndex }) => {
   const [showChart, setShowChart] = useState(false);
   const [checkedItems, setCheckedItems] = useState({});
 
@@ -64,6 +67,17 @@ const Table = () => {
     setCheckedItems((checkedItems[index] = !checkedItems[index]));
   };
 
+  const handleUpdate = (index) => {
+    const rowDataForEdit = rows[index];
+    setIndex(index);
+    dispatch(clearCheck(index));
+
+    //clear checkbox from given index
+    setCheckedItems((checkedItems[index] = !checkedItems[index]));
+    dispatch(selectDate(rowDataForEdit.date));
+    dispatch(addValue(rowDataForEdit.value));
+  };
+
   //render rows according to the data
   const tableRows = rows.map((item, index) => (
     <Row
@@ -72,8 +86,9 @@ const Table = () => {
       count={index + 1}
       index={index}
       isChecked={!!checkedItems[index]}
-      onDelete={handleDelete}
+      onDelete={() => handleDelete(index)}
       onChange={handleCheckboxChange}
+      handleUpdate={handleUpdate}
     />
   ));
 
@@ -95,11 +110,11 @@ const Table = () => {
       <table style={styles.table}>
         <thead>
           <tr>
-            <th style={styles.th}>checkbox</th>
-            <th style={styles.th}>count</th>
-            <th style={styles.th}>date</th>
-            <th style={styles.th}>value</th>
-            <th style={styles.th}>action</th>
+            <th style={styles.th}>Checkbox</th>
+            <th style={styles.th}>Count</th>
+            <th style={styles.th}>Date</th>
+            <th style={styles.th}>Value</th>
+            <th style={styles.th}>Actions</th>
           </tr>
         </thead>
         <tbody>{tableRows}</tbody>

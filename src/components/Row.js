@@ -4,7 +4,15 @@ import { selectRow } from "../reduxStore/calendarSlice";
 import { FaRegTrashCan, FaPencil } from "react-icons/fa6";
 import Checkbox from "./Checkbox";
 
-const Row = ({ data, count, index, onDelete, onChange, isChecked }) => {
+const Row = ({
+  data,
+  count,
+  index,
+  isChecked,
+  onDelete,
+  onChange,
+  handleUpdate,
+}) => {
   const dispatch = useDispatch();
 
   const handleClick = () => {
@@ -32,7 +40,11 @@ const Row = ({ data, count, index, onDelete, onChange, isChecked }) => {
         <button disabled={!isChecked} onClick={() => onDelete(index)}>
           <FaRegTrashCan color={isChecked ? "red" : "black"} />
         </button>
-        <button style={{ marginLeft: "5px" }}>
+        <button
+          disabled={!isChecked}
+          style={{ marginLeft: "5px" }}
+          onClick={() => handleUpdate(index)}
+        >
           <FaPencil color={isChecked ? "blue" : "black"} />
         </button>
       </td>
