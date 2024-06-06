@@ -15,8 +15,8 @@ const Row = ({
 }) => {
   const dispatch = useDispatch();
 
-  const handleClick = () => {
-    dispatch(selectRow({ index, data }));
+  const handleClick = (id) => {
+    dispatch(selectRow({ id, data }));
     onChange(index, !isChecked);
   };
 
@@ -31,21 +31,20 @@ const Row = ({
   return (
     <tr>
       <td style={styles.td}>
-        <Checkbox isChecked={isChecked} onChange={handleClick} />
+        <Checkbox isChecked={isChecked} onChange={() => handleClick(data.id)} />
       </td>
       <td style={styles.td}>{count}</td>
       <td style={styles.td}>{data.date}</td>
       <td style={styles.td}>{data.value}</td>
       <td style={styles.td}>
-        <button disabled={!isChecked} onClick={() => onDelete(index)}>
-          <FaRegTrashCan color={isChecked ? "red" : "black"} />
+        <button onClick={() => onDelete(data.id)}>
+          <FaRegTrashCan color="red" />
         </button>
         <button
-          disabled={!isChecked}
           style={{ marginLeft: "5px" }}
-          onClick={() => handleUpdate(index)}
+          onClick={() => handleUpdate(data.id)}
         >
-          <FaPencil color={isChecked ? "blue" : "black"} />
+          <FaPencil color="blue" />
         </button>
       </td>
     </tr>

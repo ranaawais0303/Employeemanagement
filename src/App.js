@@ -12,7 +12,7 @@ function App() {
 
   const handleAddRow = (event) => {
     event.preventDefault();
-    dispatch(addRow(index && { index }));
+    dispatch(addRow(index && { id: index }));
     setIndex(null);
   };
 

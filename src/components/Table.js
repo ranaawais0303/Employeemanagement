@@ -6,7 +6,6 @@ import {
   clearSelectedRow,
   deleteRow,
   selectDate,
-  clearCheck,
 } from "../reduxStore/calendarSlice";
 import Row from "./Row";
 import ChartComp from "./Chart";
@@ -50,30 +49,29 @@ const Table = ({ setIndex }) => {
 
   //handle overall change in checkbox so that clear all
   //or operation on all checkboxes will be easy
-  const handleCheckboxChange = (rowIndex, isChecked) => {
-    setCheckedItems((prevItems) => ({
-      ...prevItems,
-      [rowIndex]: isChecked,
-    }));
+  const handleCheckboxChange = (index, isChecked) => {
+    setCheckedItems((prevItems) => {
+      return {
+        ...prevItems,
+        [index]: isChecked,
+      };
+    });
   };
 
   //make row data for dataSet so that forward this data to chart
   //when click on make chart button
-  const rowData = selectedRows.map((index) => rows[index]);
+  const rowData = selectedRows.map((id) => rows.find((row) => row.id === id));
   const dataSets = useMemo(() => groupByDateAndSumValue(rowData), [rowData]);
 
-  const handleDelete = (index) => {
-    dispatch(deleteRow({ index }));
-    setCheckedItems((checkedItems[index] = !checkedItems[index]));
+  const handleDelete = (id) => {
+    dispatch(deleteRow({ index: id }));
+    setCheckedItems((id = !checkedItems[id]));
   };
 
-  const handleUpdate = (index) => {
-    const rowDataForEdit = rows[index];
-    setIndex(index);
-    dispatch(clearCheck(index));
+  const handleUpdate = (id) => {
+    const rowDataForEdit = rows.find((row) => row.id === id);
+    setIndex(id);
 
-    //clear checkbox from given index
-    setCheckedItems((checkedItems[index] = !checkedItems[index]));
     dispatch(selectDate(rowDataForEdit.date));
     dispatch(addValue(rowDataForEdit.value));
   };
@@ -86,7 +84,7 @@ const Table = ({ setIndex }) => {
       count={index + 1}
       index={index}
       isChecked={!!checkedItems[index]}
-      onDelete={() => handleDelete(index)}
+      onDelete={() => handleDelete(item.id)}
       onChange={handleCheckboxChange}
       handleUpdate={handleUpdate}
     />
@@ -110,7 +108,7 @@ const Table = ({ setIndex }) => {
       <table style={styles.table}>
         <thead>
           <tr>
-            <th style={styles.th}>Checkbox</th>
+            <th style={styles.th}>Select</th>
             <th style={styles.th}>Count</th>
             <th style={styles.th}>Date</th>
             <th style={styles.th}>Value</th>

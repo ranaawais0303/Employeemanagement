@@ -19,22 +19,24 @@ const calendarSlice = createSlice({
       state.value = action.payload;
     },
 
-    clearCheck: (state, action) => {
-      state.selectedRows = state.selectedRows.filter(
-        (selectedIndex) => selectedIndex !== action.payload
-      );
-    },
-
     addRow: (state, action) => {
+      const id = () => {
+        // Math.random should be unique because of its seeding algorithm.
+        // Convert it to base 36 (numbers + letters), and grab the first 9 characters
+        // after the decimal.
+        return "_" + Math.random().toString(36).substr(2, 9);
+      };
+      const uid = id();
+      console.log(uid, "here is the id ");
       if (action.payload || action.payload === 0) {
         const index =
           typeof action?.payload === "number"
             ? action?.payload
-            : action?.payload.index;
+            : action?.payload.id;
 
-        state.rows = state.rows.map((row, i) => {
-          if (i === index) {
-            return { date: state.selectedDate, value: state.value };
+        state.rows = state.rows.map((row) => {
+          if (row.id === index) {
+            return { id: row.id, date: state.selectedDate, value: state.value };
           } else {
             return row;
           }
@@ -42,21 +44,23 @@ const calendarSlice = createSlice({
         state.selectedDate = "";
         state.value = "";
       } else {
-        state.rows.push({ date: state.selectedDate, value: state.value });
+        state.rows.push({
+          id: uid,
+          date: state.selectedDate,
+          value: state.value,
+        });
         state.selectedDate = "";
         state.value = "";
       }
     },
 
     selectRow: (state, action) => {
-      const { index } = action.payload;
-      const isSelected = state.selectedRows.includes(index);
+      const { id } = action.payload;
+      const isSelected = state.selectedRows.includes(id);
       if (!isSelected) {
-        state.selectedRows.push(index);
+        state.selectedRows.push(id);
       } else {
-        state.selectedRows = state.selectedRows.filter(
-          (selectedIndex) => selectedIndex !== index
-        );
+        state.selectedRows = state.selectedRows.filter((uid) => uid !== id);
       }
     },
 
@@ -66,10 +70,10 @@ const calendarSlice = createSlice({
 
     deleteRow: (state, action) => {
       const { index } = action.payload;
-      state.rows = state.rows.filter((row, i) => i !== index);
-      state.selectedRows = state.selectedRows.filter(
-        (selectedIndex) => selectedIndex !== index
-      );
+      state.rows = state.rows.filter((row, i) => row.id !== index);
+      state.selectedRows = state.selectedRows?.filter((selectedIndex) => {
+        return selectedIndex !== index;
+      });
     },
 
     chartData: (state, action) => {
@@ -86,6 +90,5 @@ export const {
   clearSelectedRow,
   selectDate,
   addValue,
-  clearCheck,
 } = calendarSlice.actions;
 export default calendarSlice.reducer;
