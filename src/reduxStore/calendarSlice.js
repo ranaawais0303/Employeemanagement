@@ -3,16 +3,27 @@ import { createSlice } from "@reduxjs/toolkit";
 const calendarSlice = createSlice({
   name: "calendar",
   initialState: {
-    date: null,
-    value: 0,
+    selectedDate: "",
+    value: "",
     id: 0,
     rows: [],
     selectedRows: [],
     dataSet: [],
   },
   reducers: {
+    selectDate: (state, action) => {
+      state.selectedDate = action.payload;
+    },
+
+    addValue: (state, action) => {
+      state.value = action.payload;
+    },
+
     addRow: (state, action) => {
-      state.rows.push(action.payload);
+      // state.rows.push(action.payload);
+      state.rows.push({ date: state.selectedDate, value: state.value });
+      state.selectedDate = "";
+      state.value = "";
     },
 
     selectRow: (state, action) => {
@@ -38,11 +49,19 @@ const calendarSlice = createSlice({
         (selectedIndex) => selectedIndex !== index
       );
     },
+
     chartData: (state, action) => {
       state.dataSet = action.payload;
     },
   },
 });
-export const { addRow, selectRow, deleteRow, chartData, clearSelectedRow } =
-  calendarSlice.actions;
+export const {
+  addRow,
+  selectRow,
+  deleteRow,
+  chartData,
+  clearSelectedRow,
+  selectDate,
+  addValue,
+} = calendarSlice.actions;
 export default calendarSlice.reducer;

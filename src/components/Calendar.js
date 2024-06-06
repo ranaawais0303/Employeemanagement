@@ -1,33 +1,44 @@
-import React, { useState, useEffect } from 'react';
-import './Calendar.css';
+import React, { useState, useEffect } from "react";
+import "./Calendar.css";
+import { useSelector } from "react-redux";
 
-const Calendar = ({ selectedDate, onDateSelect }) => {
+const Calendar = ({ onDateSelect }) => {
   const [currentDate, setCurrentDate] = useState(new Date());
   const [selectedDay, setSelectedDay] = useState(null);
+  const { selectedDate } = useSelector((store) => store.calendar);
 
   useEffect(() => {
     if (selectedDate) {
-      const dateParts = selectedDate.split('/');
+      const dateParts = selectedDate.split("/");
       const date = new Date(dateParts[2], dateParts[0] - 1, dateParts[1]);
       setCurrentDate(date);
       setSelectedDay(date.getDate());
     }
   }, [selectedDate]);
 
-  const getDaysInMonth = (month, year) => new Date(year, month + 1, 0).getDate();
+  const getDaysInMonth = (month, year) =>
+    new Date(year, month + 1, 0).getDate();
 
   const getFirstDayOfMonth = (month, year) => new Date(year, month, 1).getDay();
 
   const handlePrevMonth = () => {
-    setCurrentDate(new Date(currentDate.getFullYear(), currentDate.getMonth() - 1, 1));
+    setCurrentDate(
+      new Date(currentDate.getFullYear(), currentDate.getMonth() - 1, 1)
+    );
   };
 
   const handleNextMonth = () => {
-    setCurrentDate(new Date(currentDate.getFullYear(), currentDate.getMonth() + 1, 1));
+    setCurrentDate(
+      new Date(currentDate.getFullYear(), currentDate.getMonth() + 1, 1)
+    );
   };
 
   const handleDateClick = (day) => {
-    const selectedDate = new Date(currentDate.getFullYear(), currentDate.getMonth(), day);
+    const selectedDate = new Date(
+      currentDate.getFullYear(),
+      currentDate.getMonth(),
+      day
+    );
     onDateSelect(selectedDate.toLocaleDateString());
     setSelectedDay(day);
   };
@@ -48,7 +59,7 @@ const Calendar = ({ selectedDate, onDateSelect }) => {
       days.push(
         <div
           key={day}
-          className={`calendar-day ${isSelected ? 'selected' : ''}`}
+          className={`calendar-day ${isSelected ? "selected" : ""}`}
           onClick={() => handleDateClick(day)}
         >
           {day}
@@ -63,7 +74,10 @@ const Calendar = ({ selectedDate, onDateSelect }) => {
     <div className="calendar">
       <div className="calendar-header">
         <button onClick={handlePrevMonth}>&lt;</button>
-        <div>{currentDate.toLocaleString('default', { month: 'long' })} {currentDate.getFullYear()}</div>
+        <div>
+          {currentDate.toLocaleString("default", { month: "long" })}{" "}
+          {currentDate.getFullYear()}
+        </div>
         <button onClick={handleNextMonth}>&gt;</button>
       </div>
       <div className="calendar-grid">{renderCalendar()}</div>

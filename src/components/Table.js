@@ -61,6 +61,7 @@ const Table = () => {
 
   const handleDelete = (index) => {
     dispatch(deleteRow({ index }));
+    setCheckedItems((checkedItems[index] = !checkedItems[index]));
   };
 
   //render rows according to the data
