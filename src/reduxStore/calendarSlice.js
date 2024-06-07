@@ -28,29 +28,35 @@ const calendarSlice = createSlice({
       };
       const uid = id();
       console.log(uid, "here is the id ");
-      if (action.payload || action.payload === 0) {
-        const index =
-          typeof action?.payload === "number"
-            ? action?.payload
-            : action?.payload.id;
+      if (state.selectedDate && state.value) {
+        if (action.payload || action.payload === 0) {
+          const index =
+            typeof action?.payload === "number"
+              ? action?.payload
+              : action?.payload.id;
 
-        state.rows = state.rows.map((row) => {
-          if (row.id === index) {
-            return { id: row.id, date: state.selectedDate, value: state.value };
-          } else {
-            return row;
-          }
-        });
-        state.selectedDate = "";
-        state.value = "";
-      } else {
-        state.rows.push({
-          id: uid,
-          date: state.selectedDate,
-          value: state.value,
-        });
-        state.selectedDate = "";
-        state.value = "";
+          state.rows = state.rows.map((row) => {
+            if (row.id === index) {
+              return {
+                id: row.id,
+                date: state.selectedDate,
+                value: state.value,
+              };
+            } else {
+              return row;
+            }
+          });
+          state.selectedDate = "";
+          state.value = "";
+        } else {
+          state.rows.push({
+            id: uid,
+            date: state.selectedDate,
+            value: state.value,
+          });
+          state.selectedDate = "";
+          state.value = "";
+        }
       }
     },
 

@@ -31,7 +31,11 @@ const Row = ({
   return (
     <tr>
       <td style={styles.td}>
-        <Checkbox isChecked={isChecked} onChange={() => handleClick(data.id)} />
+        <Checkbox
+          id={data.id}
+          isChecked={isChecked}
+          onChange={() => handleClick(data.id)}
+        />
       </td>
       <td style={styles.td}>{count}</td>
       <td style={styles.td}>{data.date}</td>

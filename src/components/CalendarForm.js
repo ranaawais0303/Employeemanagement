@@ -39,40 +39,42 @@ const CalendarForm = ({ handleAddRow }) => {
   }, []);
 
   return (
-    <form onSubmit={handleAddRow}>
-      <div className="input-container" ref={popupRef}>
-        <input
-          style={{ marginBottom: "10px" }}
-          type="text"
-          ref={inputRef}
-          onFocus={handleFocus}
-          value={selectedDate}
-          readOnly
-          placeholder="Select a date"
-        />
-        {showPopup && (
-          <div className="popup">
-            <div className="popup-content">
-              <Calendar onDateSelect={handleDateSelect} />
+    <div>
+      <form onSubmit={handleAddRow}>
+        <div className="input-container" ref={popupRef}>
+          <input
+            style={{ marginBottom: "10px" }}
+            type="text"
+            ref={inputRef}
+            onFocus={handleFocus}
+            value={selectedDate}
+            readOnly
+            placeholder="Select a date"
+          />
+          {showPopup && (
+            <div className="popup">
+              <div className="popup-content">
+                <Calendar onDateSelect={handleDateSelect} />
+              </div>
             </div>
-          </div>
-        )}
-      </div>
-      <input
-        style={{ marginLeft: "5px" }}
-        type="text"
-        placeholder="Enter value"
-        onChange={(e) => {
-          dispatch(addValue(e.target.value));
-        }}
-        value={value}
-      />
-      <div>
-        <button type="submit" disabled={!selectedDate || !value}>
-          submit
-        </button>
-      </div>
-    </form>
+          )}
+        </div>
+        <input
+          style={{ marginLeft: "5px" }}
+          type="text"
+          placeholder="Enter value"
+          onChange={(e) => {
+            dispatch(addValue(e.target.value));
+          }}
+          value={value}
+        />
+        <div>
+          <button type="submit" disabled={!selectedDate || !value}>
+            submit
+          </button>
+        </div>
+      </form>
+    </div>
   );
 };
 
