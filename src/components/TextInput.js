@@ -7,11 +7,10 @@ const TextInput = ({ label, value, onChange, error }) => {
     <div className="form-group">
       <label>{label}</label>
       <input
-        class="input"
         type="text"
         value={value}
         onChange={onChange}
-        className={error ? "input-error" : ""}
+        className={error ? "input-error" : "input"}
       />
       {error && <div className="error-text">{error}</div>}
     </div>

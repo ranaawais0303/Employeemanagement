@@ -11,6 +11,7 @@ const SignupForm = ({ onSwitchToLogin }) => {
   const dispatch = useDispatch();
   const authError = useSelector((state) => state.auth.error);
   const [email, setEmail] = useState("");
+  const [Username, setUserName] = useState("");
   const [password, setPassword] = useState("");
   const [formErrors, setFormErrors] = useState({});
 
@@ -54,7 +55,15 @@ const SignupForm = ({ onSwitchToLogin }) => {
           onChange={(e) => setPassword(e.target.value)}
           error={formErrors.password}
         />
-        <button type="submit">Sign Up</button>
+        <TextInput
+          label="Username"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+          error={formErrors.email}
+        />
+        <button className="button" type="submit">
+          Sign Up
+        </button>
         {authError && <div className="error-text">{authError}</div>}
       </form>
       <div className="switch-form-link" onClick={onSwitchToLogin}>
