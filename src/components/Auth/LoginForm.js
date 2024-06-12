@@ -1,37 +1,54 @@
 import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { clearError, loginUser } from "../../reduxStore/authSlice";
-import TextInput from "../TextInput";
-import PasswordInput from "../PasswordInput";
 import "./AuthForm.css";
 import { useNavigate } from "react-router-dom";
+import OutlinedCard from "../UI/OutlinedCard";
+import CustomButton from "../UI/CustomButton";
+import CenteredWrapper from "../UI/CenteredWrapper";
+import { styles } from "../../constants/constant";
+import Input from "../UI/Input";
+import { Typography } from "@mui/material";
 // import CalendarForm from "../CalendarForm";
 // import Table from "../Table";
 
-const LoginForm = ({ onSwitchToSignup, handleAddRow, setIndex }) => {
+const LoginForm = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const authError = useSelector((state) => state.auth.error);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [formErrors, setFormErrors] = useState({});
-  // const [loggedIn, setLoggedIn] = useState(false); // Track login status
+  const [showPassword, setShowPassword] = useState(false);
+  const [error, setError] = useState({});
 
   const validateEmail = (email) => {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     return emailRegex.test(email);
   };
 
+  const handleError = (input, errorMessage) => {
+    setError((prevState) => ({ ...prevState, [input]: errorMessage }));
+  };
+
   const validateForm = () => {
-    const errors = {};
-    if (!validateEmail(email)) {
-      errors.email = "Invalid email format";
+    if (!email) {
+      handleError("email", "Email is required");
+    }
+    const validemail = validateEmail(email);
+    if (validemail) {
+      handleError("email", "Invalid email format");
+    }
+    if (!password) {
+      handleError(password, "Required password");
     }
     if (password.length < 6) {
-      errors.password = "Password must be at least 6 characters";
+      handleError("password", "Password must be at least 6 characters");
     }
-    setFormErrors(errors);
-    return Object.keys(errors).length === 0;
+    if (email && password && password.length > 5 && validemail) {
+      setError({});
+      return true;
+    }
+    return false;
   };
 
   const handleSubmit = (e) => {
@@ -56,37 +73,72 @@ const LoginForm = ({ onSwitchToSignup, handleAddRow, setIndex }) => {
 
   // Render login form if not logged in
   return (
-    <div className="auth-form">
-      <h2>Login</h2>
-      <form onSubmit={handleSubmit}>
-        <TextInput
-          label="Email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          error={formErrors.email}
-        />
-        <PasswordInput
-          label="Password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          error={formErrors.password}
-        />
-        <button className="button" type="submit">
+    <CenteredWrapper>
+      <OutlinedCard>
+        <Typography
+          variant="h4"
+          justifyContent="center"
+          textAlign="center"
+          sx={{
+            fontFamily: "serif",
+            marginBottom: "4vh",
+            marginTop: "2vh",
+            color: styles.textGreen,
+          }}
+        >
           Login
-        </button>
+        </Typography>
+        {/* <form onSubmit={handleSubmit}> */}
+        <Input
+          id="email-login"
+          name="email"
+          placeholder="Enter email address"
+          type="email"
+          value={email}
+          error={error.email}
+          required={true}
+          onFocus={() => handleError("email", null)}
+          label=" Email Address"
+          htmlFor="email-login"
+          changehandler={(e) => setEmail(e.target.value)}
+          fullWidth
+        />
+
+        <Input
+          id="-password-login"
+          name="password"
+          placeholder="Enter password"
+          type="password"
+          value={password}
+          error={error.password}
+          required={true}
+          onFocus={() => handleError("password", null)}
+          label=" Password"
+          htmlFor="password"
+          changehandler={(e) => setPassword(e.target.value)}
+          fullWidth
+          onClickHandler={() => {
+            setShowPassword(!showPassword);
+          }}
+          showPassword={showPassword}
+        />
+        <div style={{ textAlign: "right", marginRight: 35, marginTop: 5 }}>
+          Forgot Password?
+        </div>
+        <CustomButton onClick={handleSubmit}>Login</CustomButton>
         {authError && <div className="error-text">{authError}</div>}
-      </form>
-      <div
-        className="switch-form-link"
-        onClick={() => {
-          navigate("signup");
-          dispatch(clearError());
-        }}
-      >
-        Don't have an account? Sign up
-      </div>
-      <div className="forgot-password">Forgot Password?</div>
-    </div>
+
+        <div
+          className="switch-form-link"
+          onClick={() => {
+            navigate("/signup");
+            dispatch(clearError());
+          }}
+        >
+          Don't have an account? Sign up
+        </div>
+      </OutlinedCard>
+    </CenteredWrapper>
   );
 };
 
