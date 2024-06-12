@@ -11,18 +11,16 @@ const AuthRoutes = {
     {
       path: "/", // Default route within AuthLayout for tabs
       element: <TabsWithRoutes />,
-    },
-    {
-      path: "Task1", // Route for Task 1 content
-      element: (
-        <>
-          <TabsWithRoutes /> <Task1 />
-        </>
-      ),
-    },
-    {
-      path: "Task2", // Route for Task 2 content
-      element: <Task2 />,
+      children: [
+        {
+          path: "Task1", // Route for Task 1 content
+          element: <Task1 />,
+        },
+        {
+          path: "Task2", // Route for Task 2 content
+          element: <Task2 />,
+        },
+      ],
     },
   ],
 };
