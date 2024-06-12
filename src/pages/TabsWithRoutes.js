@@ -49,7 +49,6 @@ const TabsWithRoutes = () => {
           value={value}
           onChange={handleChange}
           textColor="secodary"
-          textIndicator="secondary"
           aria-label="wrapped label tabs example"
           TabIndicatorProps={{
             style: {

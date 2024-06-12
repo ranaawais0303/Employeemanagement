@@ -5,7 +5,9 @@ const NonAuthLayout = () => {
   const { loggedin } = useSelector((store) => store.auth);
   console.log(loggedin, "here is the logged in user");
 
-  return <>{loggedin ? <Navigate to={"Tabs"} replace={true} /> : <Outlet />}</>;
+  return (
+    <>{loggedin ? <Navigate to={"/Task1"} replace={true} /> : <Outlet />}</>
+  );
 };
 
 export default NonAuthLayout;

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { clearError, loginUser } from "../../reduxStore/authSlice";
 import "./AuthForm.css";
@@ -16,15 +16,21 @@ const LoginForm = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const authError = useSelector((state) => state.auth.error);
+  const { loggedIn } = useSelector((store) => store.auth);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState({});
-
   const validateEmail = (email) => {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     return emailRegex.test(email);
   };
+
+  useEffect(() => {
+    if (loggedIn) {
+      navigate("/Task1");
+    }
+  }, [loggedIn]);
 
   const handleError = (input, errorMessage) => {
     setError((prevState) => ({ ...prevState, [input]: errorMessage }));
@@ -35,7 +41,7 @@ const LoginForm = () => {
       handleError("email", "Email is required");
     }
     const validemail = validateEmail(email);
-    if (validemail) {
+    if (!validemail) {
       handleError("email", "Invalid email format");
     }
     if (!password) {
@@ -55,9 +61,9 @@ const LoginForm = () => {
     e.preventDefault();
     if (validateForm()) {
       dispatch(loginUser({ email, password }));
-      // if (!authError) {
-      //   setLoggedIn(true); // Set login status to true on successful login
-      // }
+      if (loggedIn) {
+        navigate("/Task1");
+      }
     }
   };
 
@@ -122,14 +128,19 @@ const LoginForm = () => {
           }}
           showPassword={showPassword}
         />
+        {authError && (
+          <div style={{ marginLeft: 35, color: "red", textAlign: "left" }}>
+            {authError}
+          </div>
+        )}
         <div style={{ textAlign: "right", marginRight: 35, marginTop: 5 }}>
           Forgot Password?
         </div>
+
         <CustomButton onClick={handleSubmit}>Login</CustomButton>
-        {authError && <div className="error-text">{authError}</div>}
 
         <div
-          className="switch-form-link"
+          style={{ cursor: "pointer", color: "#14452F" }}
           onClick={() => {
             navigate("/signup");
             dispatch(clearError());

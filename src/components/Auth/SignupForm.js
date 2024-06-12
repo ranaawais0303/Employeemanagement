@@ -44,7 +44,7 @@ const SignupForm = () => {
       handleError("email", "Email is required");
     }
     const validemail = validateEmail(email);
-    if (validemail) {
+    if (!validemail) {
       handleError("email", "Invalid email format");
     }
     if (!password) {
