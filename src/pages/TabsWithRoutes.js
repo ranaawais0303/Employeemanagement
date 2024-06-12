@@ -1,9 +1,11 @@
 import React from "react";
 import { Tabs, Box } from "@mui/material";
+import Tab from "@mui/material/Tab";
 import { Outlet, useLocation, useNavigate } from "react-router-dom";
 import CustomTab from "./CustomTab";
 
 const TabsWithRoutes = () => {
+  const [value, setValue] = React.useState("Task1");
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -12,22 +14,37 @@ const TabsWithRoutes = () => {
 
   // Handler for changing the tab
   const handleChange = (event, newValue) => {
+    setValue(newValue);
     navigate(newValue);
   };
 
+  // return (
+  //   <Box sx={{ width: "100%" }}>
+  //     <Tabs
+  //       value={currentPath}
+  //       onChange={handleChange}
+  //       aria-label="tabs with custom components"
+  //     >
+  //       <CustomTab label="Task1" path="/Task1" />
+  //       <CustomTab label="Task2" path="/Task2" />
+  //       {/* Add more CustomTab components as needed */}
+  //     </Tabs>
+  //     <Outlet />
+  //     {/* Render the component corresponding to the selected tab */}
+  //   </Box>
+  // );
   return (
-    <Box sx={{ width: "100%" }}>
+    <Box sx={{ marginTop: -5, width: "100%" }}>
       <Tabs
-        value={currentPath}
+        sx={{ width: "100%" }}
+        value={value}
         onChange={handleChange}
-        aria-label="tabs with custom components"
+        aria-label="wrapped label tabs example"
       >
-        <CustomTab label="Task1" path="/Task1" />
-        <CustomTab label="Task2" path="/Task2" />
-        {/* Add more CustomTab components as needed */}
+        <Tab value="Task1" label="Task1" wrapped />
+        <Tab value="Task2" label="Task2" />
       </Tabs>
       <Outlet />
-      {/* Render the component corresponding to the selected tab */}
     </Box>
   );
 };

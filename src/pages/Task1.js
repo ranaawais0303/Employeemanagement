@@ -15,7 +15,7 @@ const Task1 = () => {
   };
 
   return (
-    <div>
+    <div style={{ marginTop: 50 }}>
       <CalendarForm handleAddRow={handleAddRow} />
       <Table handleAddRow={handleAddRow} setIndex={setIndex} />
     </div>
