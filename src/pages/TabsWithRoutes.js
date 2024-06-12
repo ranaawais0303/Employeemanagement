@@ -1,22 +1,24 @@
-import React from "react";
-import { Tabs, Box } from "@mui/material";
+import React, { useEffect, useState } from "react";
+import { Tabs, Box, AppBar } from "@mui/material";
 import Tab from "@mui/material/Tab";
-import { Outlet, useLocation, useNavigate } from "react-router-dom";
-import CustomTab from "./CustomTab";
+import { Outlet, useNavigate } from "react-router-dom";
+import { styles } from "../constants/constant";
 
 const TabsWithRoutes = () => {
-  const [value, setValue] = React.useState("Task1");
+  const [value, setValue] = useState("Task1");
   const navigate = useNavigate();
-  const location = useLocation();
 
   // Extract the current path to set the selected tab
-  const currentPath = location.pathname;
 
   // Handler for changing the tab
   const handleChange = (event, newValue) => {
     setValue(newValue);
     navigate(newValue);
   };
+
+  useEffect(() => {
+    navigate(value);
+  }, []);
 
   // return (
   //   <Box sx={{ width: "100%" }}>
@@ -34,16 +36,31 @@ const TabsWithRoutes = () => {
   //   </Box>
   // );
   return (
-    <Box sx={{ marginTop: -5, width: "100%" }}>
-      <Tabs
-        sx={{ width: "100%" }}
-        value={value}
-        onChange={handleChange}
-        aria-label="wrapped label tabs example"
-      >
-        <Tab value="Task1" label="Task1" wrapped />
-        <Tab value="Task2" label="Task2" />
-      </Tabs>
+    <Box
+      sx={{
+        width: "100%",
+        borderWidth: "1px",
+        border: "5px",
+      }}
+    >
+      <AppBar sx={{ backgroundColor: styles.backgroundColor }} component="nav">
+        <Tabs
+          sx={{ width: "100%" }}
+          value={value}
+          onChange={handleChange}
+          textColor="secodary"
+          textIndicator="secondary"
+          aria-label="wrapped label tabs example"
+          TabIndicatorProps={{
+            style: {
+              backgroundColor: "white",
+            },
+          }}
+        >
+          <Tab value="Task1" label="Task1" wrapped />
+          <Tab value="Task2" label="Task2" />
+        </Tabs>
+      </AppBar>
       <Outlet />
     </Box>
   );
