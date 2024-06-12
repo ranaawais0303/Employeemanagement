@@ -1,19 +1,21 @@
 import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { loginUser } from "../../reduxStore/authSlice";
+import { clearError, loginUser } from "../../reduxStore/authSlice";
 import TextInput from "../TextInput";
 import PasswordInput from "../PasswordInput";
-// import "./AuthForm.css";
-import CalendarForm from "../CalendarForm";
-import Table from "../Table";
+import "./AuthForm.css";
+import { useNavigate } from "react-router-dom";
+// import CalendarForm from "../CalendarForm";
+// import Table from "../Table";
 
 const LoginForm = ({ onSwitchToSignup, handleAddRow, setIndex }) => {
+  const navigate = useNavigate();
   const dispatch = useDispatch();
   const authError = useSelector((state) => state.auth.error);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [formErrors, setFormErrors] = useState({});
-  const [loggedIn, setLoggedIn] = useState(false); // Track login status
+  // const [loggedIn, setLoggedIn] = useState(false); // Track login status
 
   const validateEmail = (email) => {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -32,25 +34,25 @@ const LoginForm = ({ onSwitchToSignup, handleAddRow, setIndex }) => {
     return Object.keys(errors).length === 0;
   };
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = (e) => {
     e.preventDefault();
     if (validateForm()) {
-      await dispatch(loginUser({ email, password }));
-      if (!authError) {
-        setLoggedIn(true); // Set login status to true on successful login
-      }
+      dispatch(loginUser({ email, password }));
+      // if (!authError) {
+      //   setLoggedIn(true); // Set login status to true on successful login
+      // }
     }
   };
 
   // Render CalendarForm and Table if loggedIn is true
-  if (loggedIn) {
-    return (
-      <div>
-        <CalendarForm handleAddRow={handleAddRow} />
-        <Table handleAddRow={handleAddRow} setIndex={setIndex} />
-      </div>
-    );
-  }
+  // if (loggedIn) {
+  //   return (
+  //     <div>
+  //       <CalendarForm handleAddRow={handleAddRow} />
+  //       <Table handleAddRow={handleAddRow} setIndex={setIndex} />
+  //     </div>
+  //   );
+  // }
 
   // Render login form if not logged in
   return (
@@ -74,7 +76,13 @@ const LoginForm = ({ onSwitchToSignup, handleAddRow, setIndex }) => {
         </button>
         {authError && <div className="error-text">{authError}</div>}
       </form>
-      <div className="switch-form-link" onClick={onSwitchToSignup}>
+      <div
+        className="switch-form-link"
+        onClick={() => {
+          navigate("signup");
+          dispatch(clearError());
+        }}
+      >
         Don't have an account? Sign up
       </div>
       <div className="forgot-password">Forgot Password?</div>

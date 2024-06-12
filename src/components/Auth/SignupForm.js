@@ -2,10 +2,11 @@
 import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux"; // For Redux
 // import { signup, clearError } from "../../reduxStore/authSlice";
-import { signupUser } from "../../reduxStore/authSlice";
+import { clearError, signupUser } from "../../reduxStore/authSlice";
 import TextInput from "../TextInput";
 import PasswordInput from "../PasswordInput";
 import "./AuthForm.css";
+import { useNavigate } from "react-router-dom";
 
 const SignupForm = ({ onSwitchToLogin }) => {
   const dispatch = useDispatch();
@@ -14,7 +15,7 @@ const SignupForm = ({ onSwitchToLogin }) => {
   const [Username, setUserName] = useState("");
   const [password, setPassword] = useState("");
   const [formErrors, setFormErrors] = useState({});
-
+  const navigate = useNavigate();
   const validateEmail = (email) => {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     return emailRegex.test(email);
@@ -66,7 +67,13 @@ const SignupForm = ({ onSwitchToLogin }) => {
         </button>
         {authError && <div className="error-text">{authError}</div>}
       </form>
-      <div className="switch-form-link" onClick={onSwitchToLogin}>
+      <div
+        className="switch-form-link"
+        onClick={() => {
+          navigate("login");
+          dispatch(clearError());
+        }}
+      >
         Already have an account? Login
       </div>
     </div>

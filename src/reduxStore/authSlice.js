@@ -4,6 +4,7 @@ import { createSlice } from "@reduxjs/toolkit";
 const initialState = {
   users: JSON.parse(localStorage.getItem("users")) || [],
   error: null,
+  loggedIn: localStorage.getItem("loggedIn") || false,
 };
 
 const authSlice = createSlice({
@@ -17,6 +18,7 @@ const authSlice = createSlice({
       );
       if (user) {
         state.error = null;
+        state.loggedIn = localStorage.setItem("loggedIn", true);
       } else {
         state.error = "Invalid email or password";
       }
@@ -31,6 +33,9 @@ const authSlice = createSlice({
         localStorage.setItem("users", JSON.stringify(state.users));
         state.error = null;
       }
+    },
+    logOut: (state, action) => {
+      state.loggedIn = false;
     },
     clearError: (state) => {
       state.error = null;
