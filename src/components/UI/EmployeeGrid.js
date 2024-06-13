@@ -44,10 +44,10 @@ const EmployeeGrid = () => {
     {
       headerName: "Actions",
       field: "actions",
-      cellRendererFramework: (params) => {
+      cellRenderer: (params) => {
         console.log(params, "here is the params of actions");
         return (
-          <div>
+          <div style={{ width: "200px", height: "30px", borderRadius: "50%" }}>
             <button
               className="action-button"
               onClick={() => handleEdit(params.data)}

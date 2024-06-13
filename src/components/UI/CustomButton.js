@@ -25,7 +25,7 @@ const CustomButton = ({
         buttonClose && (buttonClose === "Save" ? <PostAddIcon /> : <SaveIcon />)
       }
       style={{
-        backgroundColor: disabled ? "" : add ? "green" : "#052965",
+        backgroundColor: disabled ? "" : add ? "green" : styles.backgroundColor,
         textTransform: "none",
       }}
       {...props}

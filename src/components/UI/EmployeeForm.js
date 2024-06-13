@@ -12,6 +12,7 @@ import {
   ListItemText,
   ListItemSecondaryAction,
   IconButton,
+  Grid,
 } from "@mui/material";
 import PersonalInfoForm from "./PersonalInfoForm";
 import EducationForm from "./EducationForm";
@@ -19,6 +20,7 @@ import ExperienceForm from "./ExperienceForm";
 import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
 import EmployeeGrid from "./EmployeeGrid";
+import CustomButton from "./CustomButton";
 
 const EmployeeForm = () => {
   console.log("employeeForm is here");
@@ -29,6 +31,7 @@ const EmployeeForm = () => {
   const [currentSection, setCurrentSection] = useState("");
   const [editIndex, setEditIndex] = useState(null);
   const [currentData, setCurrentData] = useState({});
+  const [imageUrl, setImageUrl] = useState(null);
 
   // Load data from localStorage
   useEffect(() => {
@@ -89,6 +92,17 @@ const EmployeeForm = () => {
     }
   };
 
+  const handleImageChange = (event) => {
+    const file = event.target.files[0];
+    if (file) {
+      setPersonalInfo((prev) => ({
+        ...prev,
+        image: file,
+      }));
+      setImageUrl(URL.createObjectURL(file)); // Display preview of selected image
+    }
+  };
+
   return (
     <Box>
       <Typography variant="h5" gutterBottom>
@@ -96,22 +110,42 @@ const EmployeeForm = () => {
       </Typography>
       <Box sx={{ marginBottom: 2 }}>
         <Typography variant="h6">Personal Info</Typography>
-        <Button
-          variant="outlined"
-          onClick={() => handleDialogOpen("personal", personalInfo)}
-        >
-          Edit
-        </Button>
-        {personalInfo.name && <Typography>{personalInfo.name}</Typography>}
+        <Grid display="grid">
+          <CustomButton
+            onClick={() => handleDialogOpen("personal", personalInfo)}
+          >
+            Edit Personal Information
+          </CustomButton>
+
+          {personalInfo.name && (
+            <Box sx={{ display: "flex", alignItems: "center", marginTop: 1 }}>
+              <img
+                src={imageUrl}
+                alt="Profile"
+                style={{
+                  width: "220px",
+                  height: "220px",
+                  borderRadius: "50%",
+                  marginRight: "10px",
+                }}
+              />
+              <Typography>{personalInfo.name}</Typography>
+            </Box>
+          )}
+          <input
+            type="file"
+            accept="image/*"
+            onChange={handleImageChange}
+            style={{ marginTop: "10px" }}
+          />
+        </Grid>
       </Box>
       <Box sx={{ marginBottom: 2 }}>
         <Typography variant="h6">Education</Typography>
-        <Button
-          variant="outlined"
-          onClick={() => handleDialogOpen("education")}
-        >
+        <CustomButton onClick={() => handleDialogOpen("education")}>
           Add Education
-        </Button>
+        </CustomButton>
+
         <List>
           {educationList.map((edu, index) => (
             <ListItem key={index}>
@@ -134,14 +168,12 @@ const EmployeeForm = () => {
           ))}
         </List>
       </Box>
+
       <Box sx={{ marginBottom: 2 }}>
         <Typography variant="h6">Experience</Typography>
-        <Button
-          variant="outlined"
-          onClick={() => handleDialogOpen("experience")}
-        >
+        <CustomButton onClick={() => handleDialogOpen("experience")}>
           Add Experience
-        </Button>
+        </CustomButton>
         <List>
           {experienceList.map((exp, index) => (
             <ListItem key={index}>
@@ -164,6 +196,7 @@ const EmployeeForm = () => {
           ))}
         </List>
       </Box>
+
       <Dialog open={dialogOpen} onClose={handleDialogClose}>
         <DialogContent>
           {currentSection === "personal" && (
@@ -182,6 +215,9 @@ const EmployeeForm = () => {
           </Button>
         </DialogActions>
       </Dialog>
+      <CustomButton sx={{ textAlign: "right", marginBottom: "0" }}>
+        Save Information
+      </CustomButton>
     </Box>
   );
 };
