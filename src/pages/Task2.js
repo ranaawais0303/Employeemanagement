@@ -1,4 +1,6 @@
+import EmployeeGrid from "../components/UI/EmployeeGrid";
+
 const Task2 = () => {
-  return <h1>Task 2</h1>;
+  return <EmployeeGrid />;
 };
 export default Task2;

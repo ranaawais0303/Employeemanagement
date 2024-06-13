@@ -18,7 +18,8 @@ const authSlice = createSlice({
       );
       if (user) {
         state.error = null;
-        state.loggedIn = localStorage.setItem("loggedIn", true);
+        localStorage.setItem("loggedIn", true);
+        state.loggedIn = true;
       } else {
         state.error = "Invalid email or password";
       }
