@@ -7,9 +7,13 @@ import "./EmployeeGrid.css";
 import EmployeeForm from "./EmployeeForm";
 import CustomButton from "./CustomButton";
 import AddIcon from "@mui/icons-material/Add";
+import { useSelector } from "react-redux";
 
 const EmployeeGrid = () => {
   const [showForm, setShowForm] = useState(false);
+  const { employeeData } = useSelector((store) => store.employee);
+  const mydata = employeeData?.map((employe) => employe.personalInfo);
+  console.log(employeeData, mydata, "employeeData for grid");
 
   console.log(showForm, "show form");
   const [rowData, setRowData] = useState([

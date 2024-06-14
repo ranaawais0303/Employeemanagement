@@ -1,4 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
+import { id } from "../constants/constant";
 
 const calendarSlice = createSlice({
   name: "calendar",
@@ -20,12 +21,6 @@ const calendarSlice = createSlice({
     },
 
     addRow: (state, action) => {
-      const id = () => {
-        // Math.random should be unique because of its seeding algorithm.
-        // Convert it to base 36 (numbers + letters), and grab the first 9 characters
-        // after the decimal.
-        return "_" + Math.random().toString(36).substr(2, 9);
-      };
       const uid = id();
       console.log(uid, "here is the id ");
       if (state.selectedDate && state.value) {

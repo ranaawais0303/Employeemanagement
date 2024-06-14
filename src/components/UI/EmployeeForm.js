@@ -5,7 +5,6 @@ import {
   Button,
   Dialog,
   DialogContent,
-  DialogActions,
   Typography,
   List,
   ListItem,
@@ -19,11 +18,11 @@ import EducationForm from "./EducationForm";
 import ExperienceForm from "./ExperienceForm";
 import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
-import EmployeeGrid from "./EmployeeGrid";
 import CustomButton from "./CustomButton";
+import { useDispatch } from "react-redux";
+import { addEmployee } from "../../reduxStore/employeeSlice";
 
 const EmployeeForm = () => {
-  console.log("employeeForm is here");
   const [personalInfo, setPersonalInfo] = useState({});
   const [educationList, setEducationList] = useState([]);
   const [experienceList, setExperienceList] = useState([]);
@@ -33,6 +32,7 @@ const EmployeeForm = () => {
   const [currentData, setCurrentData] = useState({});
   const [imageUrl, setImageUrl] = useState(null);
 
+  const dispatch = useDispatch();
   // Load data from localStorage
   useEffect(() => {
     const savedData =
@@ -40,6 +40,10 @@ const EmployeeForm = () => {
     setPersonalInfo(savedData.personalInfo || {});
     setEducationList(savedData.educationList || []);
     setExperienceList(savedData.experienceList || []);
+
+    if (savedData.personalInfo?.image) {
+      setImageUrl(savedData.personalInfo.image);
+    }
   }, []);
 
   // Save data to localStorage
@@ -95,17 +99,24 @@ const EmployeeForm = () => {
   const handleImageChange = (event) => {
     const file = event.target.files[0];
     if (file) {
-      setPersonalInfo((prev) => ({
-        ...prev,
-        image: file,
-      }));
-      setImageUrl(URL.createObjectURL(file)); // Display preview of selected image
+      const reader = new FileReader();
+      reader.onload = () => {
+        const base64Image = reader.result;
+        setPersonalInfo((prev) => ({
+          ...prev,
+          image: base64Image,
+        }));
+        setImageUrl(base64Image);
+      };
+      reader.readAsDataURL(file);
     }
   };
 
   const onSubmitForm = () => {
     const data = { personalInfo, educationList, experienceList };
-    localStorage.setItem("employeeFormData", JSON.stringify(data));
+    // localStorage.setItem("employeeFormData", JSON.stringify(data));
+    console.log(data, "data before sending into add employee");
+    dispatch(addEmployee(data));
   };
 
   return (
