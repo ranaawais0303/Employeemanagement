@@ -11,19 +11,16 @@ import { useSelector } from "react-redux";
 
 const EmployeeGrid = () => {
   const [showForm, setShowForm] = useState(false);
+  const [dataForEdit, setDataForEdit] = useState();
   const { employeeData } = useSelector((store) => store.employee);
-  const mydata = employeeData?.map((employe) => employe.personalInfo);
-  console.log(employeeData, mydata, "employeeData for grid");
 
   console.log(showForm, "show form");
-  const [rowData, setRowData] = useState(mydata);
+  const [rowData, setRowData] = useState(employeeData);
 
   const columnDefs = [
-    { headerName: "Name", field: "name" },
-
     {
       headerName: "Image",
-      field: "image",
+      field: "personalInfo.image",
       cellRenderer: (params) => (
         <img
           src={params.value || "https://via.placeholder.com/50"}
@@ -33,9 +30,9 @@ const EmployeeGrid = () => {
       ),
       cellStyle: { textAlign: "center" },
     },
-    { headerName: "Name", field: "name" },
-    { headerName: "Email", field: "email" },
-    { headerName: "Phone Number", field: "phone" },
+    { headerName: "Name", field: "personalInfo.name" },
+    { headerName: "Email", field: "personalInfo.email" },
+    { headerName: "Phone Number", field: "personalInfo.phone" },
     {
       headerName: "Actions",
       field: "actions",
@@ -67,19 +64,12 @@ const EmployeeGrid = () => {
 
   const handleAdd = () => {
     setShowForm(true);
-    // const newRow = {
-    //   image: "https://via.placeholder.com/50",
-    //   name: "New User",
-    //   email: "newuser@example.com",
-    //   phone: "111-222-3333",
-    // };
-    // setRowData([...rowData, newRow]);
   };
 
   const handleEdit = (data) => {
     console.log(data);
-    alert(`Edit: ${data.name}`);
-    // Add your edit logic here
+    setDataForEdit(data);
+    setShowForm(true);
   };
 
   const handleDelete = (data) => {
@@ -103,7 +93,7 @@ const EmployeeGrid = () => {
   //   ],
   // };
   const form = showForm ? (
-    <EmployeeForm />
+    <EmployeeForm data={dataForEdit} />
   ) : (
     <>
       <CustomButton

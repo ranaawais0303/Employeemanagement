@@ -22,10 +22,16 @@ import CustomButton from "./CustomButton";
 import { useDispatch } from "react-redux";
 import { addEmployee } from "../../reduxStore/employeeSlice";
 
-const EmployeeForm = () => {
-  const [personalInfo, setPersonalInfo] = useState({});
-  const [educationList, setEducationList] = useState([]);
-  const [experienceList, setExperienceList] = useState([]);
+const EmployeeForm = ({ data }) => {
+  const [personalInfo, setPersonalInfo] = useState(
+    data ? data?.personalInfo : {}
+  );
+  const [educationList, setEducationList] = useState(
+    data ? data?.educationList : []
+  );
+  const [experienceList, setExperienceList] = useState(
+    data ? data?.experienceList : []
+  );
   const [dialogOpen, setDialogOpen] = useState(false);
   const [currentSection, setCurrentSection] = useState("");
   const [editIndex, setEditIndex] = useState(null);
