@@ -39,6 +39,7 @@ const EmployeeForm = ({ data }) => {
   const [imageUrl, setImageUrl] = useState(null);
 
   const dispatch = useDispatch();
+
   // Load data from localStorage
   useEffect(() => {
     const savedData =
@@ -120,7 +121,6 @@ const EmployeeForm = ({ data }) => {
 
   const onSubmitForm = () => {
     const data = { personalInfo, educationList, experienceList };
-    // localStorage.setItem("employeeFormData", JSON.stringify(data));
     console.log(data, "data before sending into add employee");
     dispatch(addEmployee(data));
   };
@@ -130,22 +130,18 @@ const EmployeeForm = ({ data }) => {
       <Typography variant="h5" gutterBottom>
         Employee Form
       </Typography>
-      <Grid container xs={12}>
-        <Grid item xs={6}>
-          <Box sx={{ marginBottom: 2, border: 1 }}>
+      <Grid container spacing={2}>
+        <Grid item xs={12} sm={6} md={4}>
+          <Box sx={{ marginBottom: 2, borderRight: 1, padding: 2 }}>
             <Typography variant="h6">Personal Info</Typography>
-            <Grid display="grid">
+            <Grid container direction="column" alignItems="left">
               <CustomButton
-                sx={{ textAlign: "right" }}
                 onClick={() => handleDialogOpen("personal", personalInfo)}
               >
                 Edit Personal Information
               </CustomButton>
-
               {personalInfo.name && (
-                <Box
-                  sx={{ display: "flex", alignItems: "center", marginTop: 1 }}
-                >
+                <Box sx={{ display: "flex", alignItems: "left", marginTop: 1 }}>
                   <img
                     src={imageUrl}
                     alt="Profile"
@@ -168,13 +164,12 @@ const EmployeeForm = ({ data }) => {
             </Grid>
           </Box>
         </Grid>
-        <Grid item xs={6}>
+        <Grid item xs={12} sm={6} md={4}>
           <Box sx={{ marginBottom: 2 }}>
             <Typography variant="h6">Education</Typography>
             <CustomButton onClick={() => handleDialogOpen("education")}>
               Add Education
             </CustomButton>
-
             <List>
               {educationList.map((edu, index) => (
                 <ListItem key={index}>
@@ -201,13 +196,10 @@ const EmployeeForm = ({ data }) => {
             </List>
           </Box>
         </Grid>
-        <Grid item xs={4}>
-          <Box sx={{ marginBottom: 2, border: 1 }}>
+        <Grid item xs={12} md={4}>
+          <Box sx={{ marginBottom: 2, padding: 2 }}>
             <Typography variant="h6">Experience</Typography>
-            <CustomButton
-              sx={{ textAlign: "right" }}
-              onClick={() => handleDialogOpen("experience")}
-            >
+            <CustomButton onClick={() => handleDialogOpen("experience")}>
               Add Experience
             </CustomButton>
             <List>
@@ -236,36 +228,37 @@ const EmployeeForm = ({ data }) => {
             </List>
           </Box>
         </Grid>
-
-        <Dialog open={dialogOpen} onClose={handleDialogClose}>
-          <DialogContent sx={{ minWidth: "500px" }}>
-            {currentSection === "personal" && (
-              <PersonalInfoForm
-                onSave={handleSave}
-                initialData={currentData}
-                onCancel={handleDialogClose}
-              />
-            )}
-            {currentSection === "education" && (
-              <EducationForm
-                onSave={handleSave}
-                initialData={currentData}
-                onCancel={handleDialogClose}
-              />
-            )}
-            {currentSection === "experience" && (
-              <ExperienceForm
-                onSave={handleSave}
-                initialData={currentData}
-                onCancel={handleDialogClose}
-              />
-            )}
-          </DialogContent>
-        </Dialog>
       </Grid>
+
+      <Dialog open={dialogOpen} onClose={handleDialogClose}>
+        <DialogContent sx={{ minWidth: "500px" }}>
+          {currentSection === "personal" && (
+            <PersonalInfoForm
+              onSave={handleSave}
+              initialData={currentData}
+              onCancel={handleDialogClose}
+            />
+          )}
+          {currentSection === "education" && (
+            <EducationForm
+              onSave={handleSave}
+              initialData={currentData}
+              onCancel={handleDialogClose}
+            />
+          )}
+          {currentSection === "experience" && (
+            <ExperienceForm
+              onSave={handleSave}
+              initialData={currentData}
+              onCancel={handleDialogClose}
+            />
+          )}
+        </DialogContent>
+      </Dialog>
+
       <CustomButton
         onClick={onSubmitForm}
-        sx={{ textAlign: "right", marginBottom: "0" }}
+        sx={{ textAlign: "right", marginTop: 2 }}
       >
         Save Information
       </CustomButton>
