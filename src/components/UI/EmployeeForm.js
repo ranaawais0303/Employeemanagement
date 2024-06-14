@@ -130,120 +130,139 @@ const EmployeeForm = ({ data }) => {
       <Typography variant="h5" gutterBottom>
         Employee Form
       </Typography>
-      <Box sx={{ marginBottom: 2 }}>
-        <Typography variant="h6">Personal Info</Typography>
-        <Grid display="grid">
-          <CustomButton
-            onClick={() => handleDialogOpen("personal", personalInfo)}
-          >
-            Edit Personal Information
-          </CustomButton>
+      <Grid container xs={12}>
+        <Grid item xs={6}>
+          <Box sx={{ marginBottom: 2, border: 1 }}>
+            <Typography variant="h6">Personal Info</Typography>
+            <Grid display="grid">
+              <CustomButton
+                sx={{ textAlign: "right" }}
+                onClick={() => handleDialogOpen("personal", personalInfo)}
+              >
+                Edit Personal Information
+              </CustomButton>
 
-          {personalInfo.name && (
-            <Box sx={{ display: "flex", alignItems: "center", marginTop: 1 }}>
-              <img
-                src={imageUrl}
-                alt="Profile"
-                style={{
-                  width: "220px",
-                  height: "220px",
-                  borderRadius: "50%",
-                  marginRight: "10px",
-                }}
+              {personalInfo.name && (
+                <Box
+                  sx={{ display: "flex", alignItems: "center", marginTop: 1 }}
+                >
+                  <img
+                    src={imageUrl}
+                    alt="Profile"
+                    style={{
+                      width: "100px",
+                      height: "100px",
+                      borderRadius: "50%",
+                      marginRight: "10px",
+                    }}
+                  />
+                  <Typography>{personalInfo.name}</Typography>
+                </Box>
+              )}
+              <input
+                type="file"
+                accept="image/*"
+                onChange={handleImageChange}
+                style={{ marginTop: "10px" }}
               />
-              <Typography>{personalInfo.name}</Typography>
-            </Box>
-          )}
-          <input
-            type="file"
-            accept="image/*"
-            onChange={handleImageChange}
-            style={{ marginTop: "10px" }}
-          />
+            </Grid>
+          </Box>
         </Grid>
-      </Box>
-      <Box sx={{ marginBottom: 2 }}>
-        <Typography variant="h6">Education</Typography>
-        <CustomButton onClick={() => handleDialogOpen("education")}>
-          Add Education
-        </CustomButton>
+        <Grid item xs={6}>
+          <Box sx={{ marginBottom: 2 }}>
+            <Typography variant="h6">Education</Typography>
+            <CustomButton onClick={() => handleDialogOpen("education")}>
+              Add Education
+            </CustomButton>
 
-        <List>
-          {educationList.map((edu, index) => (
-            <ListItem key={index}>
-              <ListItemText primary={edu.degree} secondary={edu.institute} />
-              <ListItemSecondaryAction>
-                <IconButton
-                  edge="end"
-                  onClick={() => handleDialogOpen("education", edu, index)}
-                >
-                  <EditIcon />
-                </IconButton>
-                <IconButton
-                  edge="end"
-                  onClick={() => handleDelete("education", index)}
-                >
-                  <DeleteIcon />
-                </IconButton>
-              </ListItemSecondaryAction>
-            </ListItem>
-          ))}
-        </List>
-      </Box>
+            <List>
+              {educationList.map((edu, index) => (
+                <ListItem key={index}>
+                  <ListItemText
+                    primary={edu.degree}
+                    secondary={edu.institute}
+                  />
+                  <ListItemSecondaryAction>
+                    <IconButton
+                      edge="end"
+                      onClick={() => handleDialogOpen("education", edu, index)}
+                    >
+                      <EditIcon />
+                    </IconButton>
+                    <IconButton
+                      edge="end"
+                      onClick={() => handleDelete("education", index)}
+                    >
+                      <DeleteIcon />
+                    </IconButton>
+                  </ListItemSecondaryAction>
+                </ListItem>
+              ))}
+            </List>
+          </Box>
+        </Grid>
+        <Grid item xs={4}>
+          <Box sx={{ marginBottom: 2, border: 1 }}>
+            <Typography variant="h6">Experience</Typography>
+            <CustomButton
+              sx={{ textAlign: "right" }}
+              onClick={() => handleDialogOpen("experience")}
+            >
+              Add Experience
+            </CustomButton>
+            <List>
+              {experienceList.map((exp, index) => (
+                <ListItem key={index}>
+                  <ListItemText
+                    primary={exp.company}
+                    secondary={exp.designation}
+                  />
+                  <ListItemSecondaryAction>
+                    <IconButton
+                      edge="end"
+                      onClick={() => handleDialogOpen("experience", exp, index)}
+                    >
+                      <EditIcon />
+                    </IconButton>
+                    <IconButton
+                      edge="end"
+                      onClick={() => handleDelete("experience", index)}
+                    >
+                      <DeleteIcon />
+                    </IconButton>
+                  </ListItemSecondaryAction>
+                </ListItem>
+              ))}
+            </List>
+          </Box>
+        </Grid>
 
-      <Box sx={{ marginBottom: 2 }}>
-        <Typography variant="h6">Experience</Typography>
-        <CustomButton onClick={() => handleDialogOpen("experience")}>
-          Add Experience
-        </CustomButton>
-        <List>
-          {experienceList.map((exp, index) => (
-            <ListItem key={index}>
-              <ListItemText primary={exp.company} secondary={exp.designation} />
-              <ListItemSecondaryAction>
-                <IconButton
-                  edge="end"
-                  onClick={() => handleDialogOpen("experience", exp, index)}
-                >
-                  <EditIcon />
-                </IconButton>
-                <IconButton
-                  edge="end"
-                  onClick={() => handleDelete("experience", index)}
-                >
-                  <DeleteIcon />
-                </IconButton>
-              </ListItemSecondaryAction>
-            </ListItem>
-          ))}
-        </List>
-      </Box>
-
-      <Dialog open={dialogOpen} onClose={handleDialogClose}>
-        <DialogContent sx={{ minWidth: "500px" }}>
-          {currentSection === "personal" && (
-            <PersonalInfoForm
-              onSave={handleSave}
-              initialData={currentData}
-              onCancel={handleDialogClose}
-            />
-          )}
-          {currentSection === "education" && (
-            <EducationForm
-              onSave={handleSave}
-              initialData={currentData}
-              onCancel={handleDialogClose}
-            />
-          )}
-          {currentSection === "experience" && (
-            <ExperienceForm
-              onSave={handleSave}
-              initialData={currentData}
-              onCancel={handleDialogClose}
-            />
-          )}
-        </DialogContent>
-      </Dialog>
+        <Dialog open={dialogOpen} onClose={handleDialogClose}>
+          <DialogContent sx={{ minWidth: "500px" }}>
+            {currentSection === "personal" && (
+              <PersonalInfoForm
+                onSave={handleSave}
+                initialData={currentData}
+                onCancel={handleDialogClose}
+              />
+            )}
+            {currentSection === "education" && (
+              <EducationForm
+                onSave={handleSave}
+                initialData={currentData}
+                onCancel={handleDialogClose}
+              />
+            )}
+            {currentSection === "experience" && (
+              <ExperienceForm
+                onSave={handleSave}
+                initialData={currentData}
+                onCancel={handleDialogClose}
+              />
+            )}
+          </DialogContent>
+        </Dialog>
+      </Grid>
       <CustomButton
         onClick={onSubmitForm}
         sx={{ textAlign: "right", marginBottom: "0" }}
