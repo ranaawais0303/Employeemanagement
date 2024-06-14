@@ -1,8 +1,10 @@
-// src/components/PersonalInfoForm.jsx
 import React, { useState, useEffect } from "react";
 import { Box, Button, TextField, DialogActions } from "@mui/material";
+import PopupHeader from "./PopupHeader";
+import Input from "./Input";
+import CustomButton from "./CustomButton";
 
-const PersonalInfoForm = ({ onSave, initialData }) => {
+const PersonalInfoForm = ({ onSave, initialData, onCancel }) => {
   const [personalInfo, setPersonalInfo] = useState(initialData);
 
   useEffect(() => {
@@ -20,34 +22,33 @@ const PersonalInfoForm = ({ onSave, initialData }) => {
 
   return (
     <Box>
-      <TextField
+      <PopupHeader name="Personal Information" onCancel={onCancel} />
+      <hr />
+      <Input
         label="Name"
         name="name"
         value={personalInfo.name || ""}
         onChange={handleChange}
-        fullWidth
-        margin="dense"
       />
-      <TextField
+
+      <Input
         label="Email"
         name="email"
         value={personalInfo.email || ""}
         onChange={handleChange}
-        fullWidth
-        margin="dense"
+        style={{ margin: "0px" }}
       />
-      <TextField
+      <Input
         label="Phone"
         name="phone"
         value={personalInfo.phone || ""}
         onChange={handleChange}
-        fullWidth
-        margin="dense"
       />
       {/* Implement image upload if needed */}
       <DialogActions>
-        <Button onClick={handleSave} color="primary">
-          Save
+        <CustomButton onClick={handleSave}>Save</CustomButton>
+        <Button onClick={onCancel} color="primary">
+          Cancel
         </Button>
       </DialogActions>
     </Box>

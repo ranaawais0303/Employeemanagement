@@ -5,6 +5,8 @@ import "ag-grid-community/styles/ag-grid.css";
 import "ag-grid-community/styles/ag-theme-alpine.css";
 import "./EmployeeGrid.css";
 import EmployeeForm from "./EmployeeForm";
+import CustomButton from "./CustomButton";
+import AddIcon from "@mui/icons-material/Add";
 
 const EmployeeGrid = () => {
   const [showForm, setShowForm] = useState(false);
@@ -13,14 +15,14 @@ const EmployeeGrid = () => {
   const [rowData, setRowData] = useState([
     {
       image: "https://via.placeholder.com/50",
-      name: "John Doe",
-      email: "john@example.com",
+      name: "Rana Awais",
+      email: "rana@example.com",
       phone: "123-456-7890",
     },
     {
       image: "https://via.placeholder.com/50",
-      name: "Jane Smith",
-      email: "jane@example.com",
+      name: "awais ",
+      email: "awais@example.com",
       phone: "098-765-4321",
     },
   ]);
@@ -69,7 +71,7 @@ const EmployeeGrid = () => {
           </div>
         );
       },
-      cellStyle: { textAlign: "center" },
+      cellStyle: { textAlign: "center", justifyContent: "" },
     },
   ];
 
@@ -98,18 +100,39 @@ const EmployeeGrid = () => {
     alert(`Submit for Review: ${data.name}`);
     // Add your submit for review logic here
   };
+
+  // const autoSizeStrategy = {
+  //   type: "fitGridWidth",
+  //   defaultMinWidth: 100,
+  //   columnLimits: [
+  //     {
+  //       colId: "country",
+  //       minWidth: 900,
+  //     },
+  //   ],
+  // };
   const form = showForm ? (
     <EmployeeForm />
   ) : (
     <>
-      <button className="add-button" onClick={handleAdd}>
+      <CustomButton
+        sx={{ textAlign: "right", marginBottom: "1vh" }}
+        onClick={handleAdd}
+        endIcon={<AddIcon />}
+      >
         Add
-      </button>
-      <div className="ag-theme-alpine" style={{ height: 400, width: "100%" }}>
+      </CustomButton>
+      <div
+        className="ag-theme-alpine"
+        style={{
+          width: "100%",
+        }}
+      >
         <AgGridReact
+          // autoSizeStrategy={autoSizeStrategy}
           rowData={rowData}
           columnDefs={columnDefs}
-          defaultColDef={{ flex: 1, minWidth: 150 }}
+          defaultColDef={{ flex: 1 }}
         />
       </div>
     </>

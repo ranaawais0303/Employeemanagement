@@ -103,6 +103,11 @@ const EmployeeForm = () => {
     }
   };
 
+  const onSubmitForm = () => {
+    const data = { personalInfo, educationList, experienceList };
+    localStorage.setItem("employeeFormData", JSON.stringify(data));
+  };
+
   return (
     <Box>
       <Typography variant="h5" gutterBottom>
@@ -198,24 +203,34 @@ const EmployeeForm = () => {
       </Box>
 
       <Dialog open={dialogOpen} onClose={handleDialogClose}>
-        <DialogContent>
+        <DialogContent sx={{ minWidth: "500px" }}>
           {currentSection === "personal" && (
-            <PersonalInfoForm onSave={handleSave} initialData={currentData} />
+            <PersonalInfoForm
+              onSave={handleSave}
+              initialData={currentData}
+              onCancel={handleDialogClose}
+            />
           )}
           {currentSection === "education" && (
-            <EducationForm onSave={handleSave} initialData={currentData} />
+            <EducationForm
+              onSave={handleSave}
+              initialData={currentData}
+              onCancel={handleDialogClose}
+            />
           )}
           {currentSection === "experience" && (
-            <ExperienceForm onSave={handleSave} initialData={currentData} />
+            <ExperienceForm
+              onSave={handleSave}
+              initialData={currentData}
+              onCancel={handleDialogClose}
+            />
           )}
         </DialogContent>
-        <DialogActions>
-          <Button onClick={handleDialogClose} color="primary">
-            Cancel
-          </Button>
-        </DialogActions>
       </Dialog>
-      <CustomButton sx={{ textAlign: "right", marginBottom: "0" }}>
+      <CustomButton
+        onClick={onSubmitForm}
+        sx={{ textAlign: "right", marginBottom: "0" }}
+      >
         Save Information
       </CustomButton>
     </Box>

@@ -1,8 +1,11 @@
 // src/components/ExperienceForm.jsx
 import React, { useState, useEffect } from "react";
 import { Box, Button, TextField, DialogActions } from "@mui/material";
+import PopupHeader from "./PopupHeader";
+import CustomButton from "./CustomButton";
+import Input from "./Input";
 
-const ExperienceForm = ({ onSave, initialData }) => {
+const ExperienceForm = ({ onSave, initialData, onCancel }) => {
   const [experience, setExperience] = useState(initialData);
 
   useEffect(() => {
@@ -19,8 +22,10 @@ const ExperienceForm = ({ onSave, initialData }) => {
   };
 
   return (
-    <Box>
-      <TextField
+    <Box sx={{ minWidth: "500px" }}>
+      <PopupHeader name="Education" onCancel={onCancel} />
+      <hr />
+      <Input
         label="Company"
         name="company"
         value={experience.company || ""}
@@ -28,7 +33,7 @@ const ExperienceForm = ({ onSave, initialData }) => {
         fullWidth
         margin="dense"
       />
-      <TextField
+      <Input
         label="Designation"
         name="designation"
         value={experience.designation || ""}
@@ -36,7 +41,7 @@ const ExperienceForm = ({ onSave, initialData }) => {
         fullWidth
         margin="dense"
       />
-      <TextField
+      <Input
         label="Start Year"
         name="startYear"
         value={experience.startYear || ""}
@@ -45,7 +50,7 @@ const ExperienceForm = ({ onSave, initialData }) => {
         margin="dense"
         type="number"
       />
-      <TextField
+      <Input
         label="End Year"
         name="endYear"
         value={experience.endYear || ""}
@@ -55,8 +60,9 @@ const ExperienceForm = ({ onSave, initialData }) => {
         type="number"
       />
       <DialogActions>
-        <Button onClick={handleSave} color="primary">
-          Save
+        <CustomButton onClick={handleSave}>Save</CustomButton>
+        <Button onClick={onCancel} color="primary">
+          Cancel
         </Button>
       </DialogActions>
     </Box>

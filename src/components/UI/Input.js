@@ -36,7 +36,7 @@ const Input = ({
   const [isFocused, setIsFocused] = useState(false);
 
   return (
-    <Grid item xs={12} sx={[{ mx: "5vh" }, sx]}>
+    <Grid item xs={12} sx={[{ mx: "1vh", marginTop: "5px" }, sx]}>
       <Stack
         sx={{
           "& .MuiOutlinedInput-root": {
@@ -56,7 +56,7 @@ const Input = ({
             textAlign: "left",
           }}
         >
-          {label} <span className="text-red-600">{required ? "*" : ""}</span>
+          {label} <span style={{ color: "red " }}>{required ? "*" : ""}</span>
         </InputLabel>
         <OutlinedInput
           sx={{
