@@ -16,28 +16,17 @@ const EmployeeGrid = () => {
   console.log(employeeData, mydata, "employeeData for grid");
 
   console.log(showForm, "show form");
-  const [rowData, setRowData] = useState([
-    {
-      image: "https://via.placeholder.com/50",
-      name: "Rana Awais",
-      email: "rana@example.com",
-      phone: "123-456-7890",
-    },
-    {
-      image: "https://via.placeholder.com/50",
-      name: "awais ",
-      email: "awais@example.com",
-      phone: "098-765-4321",
-    },
-  ]);
+  const [rowData, setRowData] = useState(mydata);
 
   const columnDefs = [
+    { headerName: "Name", field: "name" },
+
     {
       headerName: "Image",
       field: "image",
       cellRenderer: (params) => (
         <img
-          src={params.value}
+          src={params.value || "https://via.placeholder.com/50"}
           alt="Profile"
           style={{ width: "30px", height: "30px", borderRadius: "50%" }}
         />
@@ -50,32 +39,29 @@ const EmployeeGrid = () => {
     {
       headerName: "Actions",
       field: "actions",
-      cellRenderer: (params) => {
-        console.log(params, "here is the params of actions");
-        return (
-          <div style={{ width: "200px", height: "30px", borderRadius: "50%" }}>
-            <button
-              className="action-button"
-              onClick={() => handleEdit(params.data)}
-            >
-              Edit
-            </button>
-            <button
-              className="action-button"
-              onClick={() => handleDelete(params.data)}
-            >
-              Delete
-            </button>
-            <button
-              className="action-button"
-              onClick={() => handleSubmit(params.data)}
-            >
-              Submit for Review
-            </button>
-          </div>
-        );
-      },
-      cellStyle: { textAlign: "center", justifyContent: "" },
+      cellRenderer: (params) => (
+        <div style={{ display: "flex", justifyContent: "space-around" }}>
+          <button
+            className="action-button"
+            onClick={() => handleEdit(params.data)}
+          >
+            Edit
+          </button>
+          <button
+            className="action-button"
+            onClick={() => handleDelete(params.data)}
+          >
+            Delete
+          </button>
+          <button
+            className="action-button"
+            onClick={() => handleSubmit(params.data)}
+          >
+            Submit for Review
+          </button>
+        </div>
+      ),
+      cellStyle: { textAlign: "center" },
     },
   ];
 
@@ -91,6 +77,7 @@ const EmployeeGrid = () => {
   };
 
   const handleEdit = (data) => {
+    console.log(data);
     alert(`Edit: ${data.name}`);
     // Add your edit logic here
   };
