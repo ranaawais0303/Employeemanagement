@@ -13,6 +13,7 @@ import Input from "../UI/Input";
 import { Typography } from "@mui/material";
 import { styles } from "../../constants/constant";
 import CustomButton from "../UI/CustomButton";
+import { validateEmail } from "../../utils";
 
 const SignupForm = () => {
   const dispatch = useDispatch();
@@ -24,11 +25,6 @@ const SignupForm = () => {
   const [error, setError] = useState({});
 
   const navigate = useNavigate();
-
-  const validateEmail = (email) => {
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    return emailRegex.test(email);
-  };
 
   const handleError = (input, errorMessage) => {
     setError((prevState) => ({ ...prevState, [input]: errorMessage }));

@@ -18,9 +18,10 @@ import EducationForm from "./EducationForm";
 import ExperienceForm from "./ExperienceForm";
 import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
-import CustomButton from "./CustomButton";
+import CustomButton from "../CustomButton";
 import { useDispatch } from "react-redux";
-import { addEmployee } from "../../reduxStore/employeeSlice";
+import { addEmployee } from "../../../reduxStore/employeeSlice";
+import SportiveDocumentForm from "./SportiveDocumentForm";
 
 const EmployeeForm = ({ data }) => {
   const [personalInfo, setPersonalInfo] = useState(
@@ -31,6 +32,9 @@ const EmployeeForm = ({ data }) => {
   );
   const [experienceList, setExperienceList] = useState(
     data ? data?.experienceList : []
+  );
+  const [sportiveDocuments, setSportiveDocuments] = useState(
+    data ? data?.sportiveDocuments : []
   );
   const [dialogOpen, setDialogOpen] = useState(false);
   const [currentSection, setCurrentSection] = useState("");
@@ -55,9 +59,14 @@ const EmployeeForm = ({ data }) => {
 
   // Save data to localStorage
   useEffect(() => {
-    const data = { personalInfo, educationList, experienceList };
+    const data = {
+      personalInfo,
+      educationList,
+      experienceList,
+      sportiveDocuments,
+    };
     localStorage.setItem("employeeFormData", JSON.stringify(data));
-  }, [personalInfo, educationList, experienceList]);
+  }, [personalInfo, educationList, experienceList, sportiveDocuments]);
 
   const handleDialogOpen = (section, data = {}, index = null) => {
     setCurrentSection(section);
@@ -78,7 +87,7 @@ const EmployeeForm = ({ data }) => {
     } else if (currentSection === "education") {
       if (editIndex !== null) {
         setEducationList((prev) =>
-          prev.map((item, index) => (index === editIndex ? data : item))
+          prev?.map((item, index) => (index === editIndex ? data : item))
         );
       } else {
         setEducationList((prev) => [...prev, data]);
@@ -86,10 +95,18 @@ const EmployeeForm = ({ data }) => {
     } else if (currentSection === "experience") {
       if (editIndex !== null) {
         setExperienceList((prev) =>
-          prev.map((item, index) => (index === editIndex ? data : item))
+          prev?.map((item, index) => (index === editIndex ? data : item))
         );
       } else {
         setExperienceList((prev) => [...prev, data]);
+      }
+    } else if (currentSection === "sportive") {
+      if (editIndex !== null) {
+        setSportiveDocuments((prev) =>
+          prev?.map((item, index) => (index === editIndex ? data : item))
+        );
+      } else {
+        setSportiveDocuments((prev) => [...prev, data]);
       }
     }
     handleDialogClose();
@@ -100,6 +117,8 @@ const EmployeeForm = ({ data }) => {
       setEducationList((prev) => prev.filter((_, i) => i !== index));
     } else if (section === "experience") {
       setExperienceList((prev) => prev.filter((_, i) => i !== index));
+    } else if (section === "sportive") {
+      setSportiveDocuments((prev) => prev.filter((_, i) => i !== index));
     }
   };
 
@@ -171,7 +190,7 @@ const EmployeeForm = ({ data }) => {
               Add Education
             </CustomButton>
             <List>
-              {educationList.map((edu, index) => (
+              {educationList?.map((edu, index) => (
                 <ListItem key={index}>
                   <ListItemText
                     primary={edu.degree}
@@ -203,7 +222,7 @@ const EmployeeForm = ({ data }) => {
               Add Experience
             </CustomButton>
             <List>
-              {experienceList.map((exp, index) => (
+              {experienceList?.map((exp, index) => (
                 <ListItem key={index}>
                   <ListItemText
                     primary={exp.company}
@@ -219,6 +238,39 @@ const EmployeeForm = ({ data }) => {
                     <IconButton
                       edge="end"
                       onClick={() => handleDelete("experience", index)}
+                    >
+                      <DeleteIcon />
+                    </IconButton>
+                  </ListItemSecondaryAction>
+                </ListItem>
+              ))}
+            </List>
+          </Box>
+        </Grid>
+
+        <Grid item xs={12} sm={6} md={4}>
+          <Box sx={{ marginBottom: 2 }}>
+            <Typography variant="h6">Sportive Documents</Typography>
+            <CustomButton onClick={() => handleDialogOpen("sportive")}>
+              Add Sportive Document
+            </CustomButton>
+            <List>
+              {sportiveDocuments?.map((doc, index) => (
+                <ListItem key={index}>
+                  <ListItemText
+                    primary={doc.documentName}
+                    secondary={doc.issueDate}
+                  />
+                  <ListItemSecondaryAction>
+                    <IconButton
+                      edge="end"
+                      onClick={() => handleDialogOpen("sportive", doc, index)}
+                    >
+                      <EditIcon />
+                    </IconButton>
+                    <IconButton
+                      edge="end"
+                      onClick={() => handleDelete("sportive", index)}
                     >
                       <DeleteIcon />
                     </IconButton>
@@ -248,6 +300,13 @@ const EmployeeForm = ({ data }) => {
           )}
           {currentSection === "experience" && (
             <ExperienceForm
+              onSave={handleSave}
+              initialData={currentData}
+              onCancel={handleDialogClose}
+            />
+          )}
+          {currentSection === "sportive" && (
+            <SportiveDocumentForm
               onSave={handleSave}
               initialData={currentData}
               onCancel={handleDialogClose}

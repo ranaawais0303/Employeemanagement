@@ -4,10 +4,10 @@ import { AgGridReact } from "ag-grid-react";
 import "ag-grid-community/styles/ag-grid.css";
 import "ag-grid-community/styles/ag-theme-alpine.css";
 import "./EmployeeGrid.css";
-import EmployeeForm from "./EmployeeForm";
 import CustomButton from "./CustomButton";
 import AddIcon from "@mui/icons-material/Add";
 import { useSelector } from "react-redux";
+import EmployeeForm from "./forms/EmployeeForm";
 
 const EmployeeGrid = () => {
   const [showForm, setShowForm] = useState(false);
