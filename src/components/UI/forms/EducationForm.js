@@ -90,11 +90,11 @@ const EducationForm = ({ onSave, initialData, onCancel }) => {
         value={education.startDate || ""}
         error={error.startDate}
         onFocus={() => handleError("startDate", null)}
+        required={true}
         onChange={handleChange}
         fullWidth
         margin="dense"
         type="date"
-        required={true}
         InputLabelProps={{ shrink: true }}
       />
 

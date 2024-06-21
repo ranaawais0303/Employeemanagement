@@ -8,12 +8,23 @@ import CustomButton from "./CustomButton";
 import AddIcon from "@mui/icons-material/Add";
 import { useSelector } from "react-redux";
 import EmployeeForm from "./forms/EmployeeForm";
+import { IconButton, Menu, MenuItem } from "@mui/material";
+import MoreVertOutlinedIcon from "@mui/icons-material/MoreVertOutlined";
 
 const EmployeeGrid = () => {
   const [showForm, setShowForm] = useState(false);
   const [dataForEdit, setDataForEdit] = useState();
   const { employeeData } = useSelector((store) => store.employee);
+  // const [selectedEmployee, setSelectedEmployee] = useState(null);
+  const [anchorEl, setAnchorEl] = useState(null);
 
+  const handleClick = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
   console.log(showForm, "show form");
   const [rowData, setRowData] = useState(employeeData);
 
@@ -37,26 +48,59 @@ const EmployeeGrid = () => {
       headerName: "Actions",
       field: "actions",
       cellRenderer: (params) => (
-        <div style={{ display: "flex", justifyContent: "space-around" }}>
-          <button
-            className="action-button"
-            onClick={() => handleEdit(params.data)}
+        <>
+          <IconButton
+            aria-controls="simple-menu"
+            aria-haspopup="true"
+            onClick={handleClick}
           >
-            Edit
-          </button>
-          <button
-            className="action-button"
-            onClick={() => handleDelete(params.data)}
+            <MoreVertOutlinedIcon />
+          </IconButton>
+          <Menu
+            id="simple-menu"
+            anchorEl={anchorEl}
+            open={Boolean(anchorEl)}
+            onClose={handleClose}
+            keepMounted
+            style={{ top: "90px" }}
+            PaperProps={{
+              elevation: 0,
+              sx: {
+                overflow: "visible",
+                filter: "drop-shadow(1px 1px 3px rgba(0,0,0,0.09))",
+                mt: 1.5,
+                "& .MuiAvatar-root": {
+                  width: 32,
+                  height: 32,
+                  ml: -0.5,
+                  mr: 1,
+                },
+                "&:before": {
+                  content: '""',
+                  display: "block",
+                  position: "absolute",
+                  top: 0,
+                  right: 14,
+                  width: 10,
+                  height: 10,
+                  bgcolor: "background.paper",
+                  transform: "translateY(-50%) rotate(45deg)",
+                  zIndex: 0,
+                },
+              },
+            }}
+            transformOrigin={{ horizontal: "right", vertical: "top" }}
+            anchorOrigin={{ horizontal: "right", vertical: "top" }}
           >
-            Delete
-          </button>
-          <button
-            className="action-button"
-            onClick={() => handleSubmit(params.data)}
-          >
-            Submit for Review
-          </button>
-        </div>
+            <MenuItem onClick={() => handleEdit(params.data)}>Edit</MenuItem>
+            <MenuItem onClick={() => handleDelete(params.data)}>
+              Delete
+            </MenuItem>
+            <MenuItem onClick={() => handleSubmit(params.data)}>
+              Submit for Review
+            </MenuItem>
+          </Menu>
+        </>
       ),
       cellStyle: { textAlign: "center" },
     },

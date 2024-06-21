@@ -44,3 +44,8 @@ body {
 .action-button:hover {
     background-color: #0056b3;
 }
+
+.ag-grid-menu {
+    top: calc(100% - 2px)!important; /* Adjust the -2px value to fine-tune positioning */
+    left: -10px!important;
+  }

@@ -51,6 +51,7 @@ const EmployeeForm = ({ data }) => {
     setPersonalInfo(savedData.personalInfo || {});
     setEducationList(savedData.educationList || []);
     setExperienceList(savedData.experienceList || []);
+    setSportiveDocuments(savedData.sportiveDocuments || []);
 
     if (savedData.personalInfo?.image) {
       setImageUrl(savedData.personalInfo.image);
@@ -82,6 +83,7 @@ const EmployeeForm = ({ data }) => {
   };
 
   const handleSave = (data) => {
+    console.log(data, "here is the data for form");
     if (currentSection === "personal") {
       setPersonalInfo(data);
     } else if (currentSection === "education") {
@@ -139,7 +141,12 @@ const EmployeeForm = ({ data }) => {
   };
 
   const onSubmitForm = () => {
-    const data = { personalInfo, educationList, experienceList };
+    const data = {
+      personalInfo,
+      educationList,
+      experienceList,
+      sportiveDocuments,
+    };
     console.log(data, "data before sending into add employee");
     dispatch(addEmployee(data));
   };
