@@ -6,20 +6,27 @@ import "ag-grid-community/styles/ag-theme-alpine.css";
 import "./EmployeeGrid.css";
 import CustomButton from "./CustomButton";
 import AddIcon from "@mui/icons-material/Add";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import EmployeeForm from "./forms/EmployeeForm";
 import { IconButton, Menu, MenuItem } from "@mui/material";
 import MoreVertOutlinedIcon from "@mui/icons-material/MoreVertOutlined";
+import MenuButtons from "./MenuButtons";
+import { addReadOnly, removeEmployee } from "../../reduxStore/employeeSlice";
 
 const EmployeeGrid = () => {
   const [showForm, setShowForm] = useState(false);
   const [dataForEdit, setDataForEdit] = useState();
   const { employeeData } = useSelector((store) => store.employee);
+  const [selectedRowData, setSelectedRowData] = useState(null);
+
+  console.log(employeeData, "here is the employee data");
   // const [selectedEmployee, setSelectedEmployee] = useState(null);
   const [anchorEl, setAnchorEl] = useState(null);
+  const dispatch = useDispatch();
 
-  const handleClick = (event) => {
+  const handleClick = (event, data) => {
     setAnchorEl(event.currentTarget);
+    setSelectedRowData(data);
   };
 
   const handleClose = () => {
@@ -47,61 +54,30 @@ const EmployeeGrid = () => {
     {
       headerName: "Actions",
       field: "actions",
-      cellRenderer: (params) => (
-        <>
-          <IconButton
-            aria-controls="simple-menu"
-            aria-haspopup="true"
-            onClick={handleClick}
-          >
-            <MoreVertOutlinedIcon />
-          </IconButton>
-          <Menu
-            id="simple-menu"
-            anchorEl={anchorEl}
-            open={Boolean(anchorEl)}
-            onClose={handleClose}
-            keepMounted
-            style={{ top: "90px" }}
-            PaperProps={{
-              elevation: 0,
-              sx: {
-                overflow: "visible",
-                filter: "drop-shadow(1px 1px 3px rgba(0,0,0,0.09))",
-                mt: 1.5,
-                "& .MuiAvatar-root": {
-                  width: 32,
-                  height: 32,
-                  ml: -0.5,
-                  mr: 1,
-                },
-                "&:before": {
-                  content: '""',
-                  display: "block",
-                  position: "absolute",
-                  top: 0,
-                  right: 14,
-                  width: 10,
-                  height: 10,
-                  bgcolor: "background.paper",
-                  transform: "translateY(-50%) rotate(45deg)",
-                  zIndex: 0,
-                },
-              },
-            }}
-            transformOrigin={{ horizontal: "right", vertical: "top" }}
-            anchorOrigin={{ horizontal: "right", vertical: "top" }}
-          >
-            <MenuItem onClick={() => handleEdit(params.data)}>Edit</MenuItem>
-            <MenuItem onClick={() => handleDelete(params.data)}>
-              Delete
-            </MenuItem>
-            <MenuItem onClick={() => handleSubmit(params.data)}>
-              Submit for Review
-            </MenuItem>
-          </Menu>
-        </>
-      ),
+      cellRenderer: (params) => {
+        return (
+          <>
+            <IconButton
+              aria-controls="simple-menu"
+              aria-haspopup="true"
+              onClick={(event) => handleClick(event, params.data)}
+            >
+              <MoreVertOutlinedIcon />
+            </IconButton>
+            {selectedRowData?.id === params.data.id && (
+              <MenuButtons
+                menuAnchorEl={anchorEl}
+                open={Boolean(anchorEl)}
+                onClose={handleClose}
+                data={selectedRowData}
+                onEdit={() => handleEdit(selectedRowData)}
+                onDelete={() => handleDelete(selectedRowData)}
+                onSubmit={() => handleSubmit(selectedRowData)}
+              />
+            )}
+          </>
+        );
+      },
       cellStyle: { textAlign: "center" },
     },
   ];
@@ -111,31 +87,25 @@ const EmployeeGrid = () => {
   };
 
   const handleEdit = (data) => {
-    console.log(data);
     setDataForEdit(data);
     setShowForm(true);
   };
 
   const handleDelete = (data) => {
     const updatedData = rowData.filter((row) => row !== data);
+
+    dispatch(removeEmployee(data));
+
     setRowData(updatedData);
+    handleClose();
   };
 
   const handleSubmit = (data) => {
-    alert(`Submit for Review: ${data.name}`);
+    dispatch(addReadOnly(data));
+    handleClose();
     // Add your submit for review logic here
   };
 
-  // const autoSizeStrategy = {
-  //   type: "fitGridWidth",
-  //   defaultMinWidth: 100,
-  //   columnLimits: [
-  //     {
-  //       colId: "country",
-  //       minWidth: 900,
-  //     },
-  //   ],
-  // };
   const form = showForm ? (
     <EmployeeForm data={dataForEdit} />
   ) : (

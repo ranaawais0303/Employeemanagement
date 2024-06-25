@@ -24,6 +24,7 @@ import { addEmployee } from "../../../reduxStore/employeeSlice";
 import SportiveDocumentForm from "./SportiveDocumentForm";
 
 const EmployeeForm = ({ data }) => {
+  console.log(data ? data : "", "data in form");
   const [personalInfo, setPersonalInfo] = useState(
     data ? data?.personalInfo : {}
   );
@@ -141,14 +142,15 @@ const EmployeeForm = ({ data }) => {
   };
 
   const onSubmitForm = () => {
-    const data = {
+    const dataDoc = {
+      id: data?.id,
       personalInfo,
       educationList,
       experienceList,
       sportiveDocuments,
     };
-    console.log(data, "data before sending into add employee");
-    dispatch(addEmployee(data));
+    console.log(dataDoc, "data before sending into add employee");
+    dispatch(addEmployee(dataDoc));
   };
 
   return (
