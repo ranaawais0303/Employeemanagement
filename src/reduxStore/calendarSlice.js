@@ -22,7 +22,6 @@ const calendarSlice = createSlice({
 
     addRow: (state, action) => {
       const uid = id();
-      console.log(uid, "here is the id ");
       if (state.selectedDate && state.value) {
         if (action.payload || action.payload === 0) {
           const index =

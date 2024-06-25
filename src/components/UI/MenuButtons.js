@@ -17,7 +17,6 @@ const MenuButtons = ({
   onDelete,
   onSubmit,
 }) => {
-  console.log(data, "here is the full data for edit case", menuAnchorEl);
   const [iconName, setIconName] = useState([]);
 
   const MENU_ICONS = [

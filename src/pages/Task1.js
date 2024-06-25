@@ -5,7 +5,6 @@ import CalendarForm from "../components/CalendarForm";
 import Table from "../components/Table";
 const Task1 = () => {
   const [index, setIndex] = useState();
-  console.log("Task 1");
   const dispatch = useDispatch();
 
   const handleAddRow = (event) => {

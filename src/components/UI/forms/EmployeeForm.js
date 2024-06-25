@@ -1,8 +1,7 @@
 // src/components/EmployeeForm.jsx
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import {
   Box,
-  Button,
   Dialog,
   DialogContent,
   Typography,
@@ -12,6 +11,7 @@ import {
   ListItemSecondaryAction,
   IconButton,
   Grid,
+  Stack,
 } from "@mui/material";
 import PersonalInfoForm from "./PersonalInfoForm";
 import EducationForm from "./EducationForm";
@@ -22,11 +22,14 @@ import CustomButton from "../CustomButton";
 import { useDispatch } from "react-redux";
 import { addEmployee } from "../../../reduxStore/employeeSlice";
 import SportiveDocumentForm from "./SportiveDocumentForm";
+import { styles } from "../../../constants/constant";
 
 const EmployeeForm = ({ data, onBack }) => {
-  console.log(data ? data : "", "data in form");
   const [personalInfo, setPersonalInfo] = useState(
     data ? data?.personalInfo : {}
+  );
+  const [imageName, setImageName] = useState(
+    data ? data?.imageName : "No image selected"
   );
   const [educationList, setEducationList] = useState(
     data ? data?.educationList : []
@@ -41,7 +44,8 @@ const EmployeeForm = ({ data, onBack }) => {
   const [currentSection, setCurrentSection] = useState("");
   const [editIndex, setEditIndex] = useState(null);
   const [currentData, setCurrentData] = useState({});
-  const [imageUrl, setImageUrl] = useState(null);
+  const [imageUrl, setImageUrl] = useState(data?.personalInfo?.image);
+  const inputRef = useRef(null);
 
   const dispatch = useDispatch();
 
@@ -56,6 +60,7 @@ const EmployeeForm = ({ data, onBack }) => {
 
     if (savedData.personalInfo?.image) {
       setImageUrl(savedData.personalInfo.image);
+      setImageName(savedData.personalInfo.imageName);
     }
   }, []);
 
@@ -84,7 +89,6 @@ const EmployeeForm = ({ data, onBack }) => {
   };
 
   const handleSave = (data) => {
-    console.log(data, "here is the data for form");
     if (currentSection === "personal") {
       setPersonalInfo(data);
     } else if (currentSection === "education") {
@@ -129,14 +133,18 @@ const EmployeeForm = ({ data, onBack }) => {
     const file = event.target.files[0];
     if (file) {
       const reader = new FileReader();
+
       reader.onload = () => {
         const base64Image = reader.result;
         setPersonalInfo((prev) => ({
           ...prev,
           image: base64Image,
+          imageName: file.name,
         }));
         setImageUrl(base64Image);
       };
+
+      setImageName(file.name);
       reader.readAsDataURL(file);
     }
   };
@@ -149,9 +157,12 @@ const EmployeeForm = ({ data, onBack }) => {
       experienceList,
       sportiveDocuments,
     };
-    console.log(dataDoc, "data before sending into add employee");
     dispatch(addEmployee(dataDoc));
     onBack();
+  };
+
+  const handleClick = () => {
+    inputRef.current.click();
   };
 
   return (
@@ -160,7 +171,7 @@ const EmployeeForm = ({ data, onBack }) => {
         Employee Form
       </Typography>
       <Grid container spacing={2}>
-        <Grid item xs={12} sm={6} md={4}>
+        <Grid item xs={12} sm={6} md={6}>
           <Box sx={{ marginBottom: 2, borderRight: 1, padding: 2 }}>
             <Typography variant="h6">Personal Info</Typography>
             <Grid container direction="column" alignItems="left">
@@ -185,16 +196,41 @@ const EmployeeForm = ({ data, onBack }) => {
                   <Typography>{personalInfo.name}</Typography>
                 </Box>
               )}
-              <input
+              <Stack direction="row">
+                <input
+                  type="file"
+                  onChange={handleImageChange}
+                  accept="image/*"
+                  style={{ display: "none" }}
+                  ref={inputRef}
+                />
+                <CustomButton
+                  // endIcon={<UploadFileIcon />}
+                  sx={{ margin: 0 }}
+                  onClick={handleClick}
+                >
+                  Upload image
+                </CustomButton>
+                <label
+                  style={{
+                    margin: "1vh",
+                    color: styles.textGreen,
+                    fontFamily: styles.fontFamily,
+                  }}
+                >
+                  {imageName}
+                </label>
+              </Stack>
+              {/* <input
                 type="file"
                 accept="image/*"
                 onChange={handleImageChange}
                 style={{ marginTop: "10px" }}
-              />
+              /> */}
             </Grid>
           </Box>
         </Grid>
-        <Grid item xs={12} sm={6} md={4}>
+        <Grid item xs={12} sm={6} md={6}>
           <Box sx={{ marginBottom: 2 }}>
             <Typography variant="h6">Education</Typography>
             <CustomButton
@@ -229,7 +265,7 @@ const EmployeeForm = ({ data, onBack }) => {
             </List>
           </Box>
         </Grid>
-        <Grid item xs={12} md={4}>
+        <Grid item xs={12} sm={6} md={6}>
           <Box sx={{ marginBottom: 2, padding: 2 }}>
             <Typography variant="h6">Experience</Typography>
             <CustomButton onClick={() => handleDialogOpen("experience")}>
@@ -262,7 +298,7 @@ const EmployeeForm = ({ data, onBack }) => {
           </Box>
         </Grid>
 
-        <Grid item xs={12} sm={6} md={4}>
+        <Grid item xs={12} sm={6} md={6}>
           <Box sx={{ marginBottom: 2 }}>
             <Typography variant="h6">Sportive Documents</Typography>
             <CustomButton onClick={() => handleDialogOpen("sportive")}>
@@ -331,6 +367,13 @@ const EmployeeForm = ({ data, onBack }) => {
 
       <CustomButton
         onClick={onSubmitForm}
+        disabled={
+          Object.keys(personalInfo).length === 0 ||
+          educationList.length < 1 ||
+          experienceList.length < 1 ||
+          sportiveDocuments.length < 1 ||
+          !imageUrl
+        }
         sx={{ textAlign: "right", marginTop: 2 }}
       >
         Save Information

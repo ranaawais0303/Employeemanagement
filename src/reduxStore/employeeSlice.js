@@ -24,7 +24,6 @@ const employeeSlice = createSlice({
         });
       }
       state.employeeData = updatedEmployeeData;
-      console.log(updatedEmployeeData, "updated data");
       localStorage.setItem("empData", JSON.stringify(updatedEmployeeData));
       // state.readOnly = true;
       // localStorage.setItem("readOnly", true);
@@ -50,14 +49,12 @@ const employeeSlice = createSlice({
         });
       } else {
         const employeeId = id();
-        console.log("id------------", employeeId);
         updatedEmployeeData = [
           ...state.employeeData, // Spread existing employee data
           { ...action.payload, id: employeeId }, // New employee object with destructured data
         ];
       }
       state.employeeData = updatedEmployeeData;
-      console.log(updatedEmployeeData, "updated data");
       localStorage.setItem("empData", JSON.stringify(updatedEmployeeData));
     },
 
@@ -75,14 +72,12 @@ const employeeSlice = createSlice({
     },
 
     removeEmployee: (state, action) => {
-      console.log("id delet--------", action.payload.id);
       let updatedEmployeeData = state.employeeData;
       updatedEmployeeData = updatedEmployeeData.filter(
         (row) => row.id !== action.payload.id
       );
 
       state.employeeData = updatedEmployeeData;
-      console.log(updatedEmployeeData, "updated data");
       localStorage.setItem("empData", JSON.stringify(updatedEmployeeData));
       // state.userData = null;
       // localStorage.removeItem("employee");

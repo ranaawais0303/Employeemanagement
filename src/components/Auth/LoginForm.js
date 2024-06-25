@@ -28,10 +28,8 @@ const LoginForm = () => {
 
   useEffect(() => {
     if (loggedIn) {
-      console.log("logged in inside if");
       navigate("/Task1");
     }
-    console.log("logged in outside if");
   }, [loggedIn]);
 
   const handleError = (input, errorMessage) => {

@@ -1,5 +1,5 @@
 // src/components/EmployeeGrid.jsx
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { AgGridReact } from "ag-grid-react";
 import "ag-grid-community/styles/ag-grid.css";
 import "ag-grid-community/styles/ag-theme-alpine.css";
@@ -12,14 +12,21 @@ import { IconButton, Menu, MenuItem } from "@mui/material";
 import MoreVertOutlinedIcon from "@mui/icons-material/MoreVertOutlined";
 import MenuButtons from "./MenuButtons";
 import { addReadOnly, removeEmployee } from "../../reduxStore/employeeSlice";
+import DeleteConfirmationDialog from "../DeleteConfirmationDialog";
 
 const EmployeeGrid = () => {
   const [showForm, setShowForm] = useState(false);
   const [dataForEdit, setDataForEdit] = useState();
+  const [deleteData, setDeleteData] = useState(null);
+  const [showDeleteDialog, setShowDeleteDialog] = useState(false);
   const { employeeData } = useSelector((store) => store.employee);
   const [selectedRowData, setSelectedRowData] = useState(null);
+  const [rowData, setRowData] = useState(employeeData);
 
-  console.log(employeeData, "here is the employee data");
+  useEffect(() => {
+    setRowData(employeeData);
+  }, [employeeData]);
+
   // const [selectedEmployee, setSelectedEmployee] = useState(null);
   const [anchorEl, setAnchorEl] = useState(null);
   const dispatch = useDispatch();
@@ -32,8 +39,6 @@ const EmployeeGrid = () => {
   const handleClose = () => {
     setAnchorEl(null);
   };
-  console.log(showForm, "show form");
-  const [rowData, setRowData] = useState(employeeData);
 
   const columnDefs = [
     {
@@ -90,18 +95,29 @@ const EmployeeGrid = () => {
     setDataForEdit(data);
     setShowForm(true);
   };
+
   const handleBack = (data) => {
     setDataForEdit(data);
     setShowForm(false);
   };
 
   const handleDelete = (data) => {
-    const updatedData = rowData.filter((row) => row !== data);
-
-    dispatch(removeEmployee(data));
-
-    setRowData(updatedData);
+    setDeleteData(data);
+    setShowDeleteDialog(true);
     handleClose();
+  };
+
+  const confirmDelete = (data) => {
+    const updatedData = rowData.filter((row) => row !== data);
+    setRowData(updatedData);
+    dispatch(removeEmployee(data));
+    setDeleteData(null);
+    setShowDeleteDialog(false);
+  };
+
+  const cancelDelete = () => {
+    setDeleteData(null);
+    setShowDeleteDialog(false);
   };
 
   const handleSubmit = (data) => {
@@ -137,7 +153,19 @@ const EmployeeGrid = () => {
     </>
   );
 
-  return <div className="grid-container">{form}</div>;
+  return (
+    <div className="grid-container">
+      {form}
+      {deleteData && (
+        <DeleteConfirmationDialog
+          show={showDeleteDialog}
+          data={deleteData}
+          onConfirm={confirmDelete}
+          onCancel={cancelDelete}
+        />
+      )}
+    </div>
+  );
 };
 
 export default EmployeeGrid;

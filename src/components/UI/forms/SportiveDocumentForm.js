@@ -1,9 +1,10 @@
 // src/components/SportiveDocumentForm.jsx
 
-import React, { useState } from "react";
-import { Box, Button, DialogActions, Typography } from "@mui/material";
+import React, { useRef, useState } from "react";
+import { Box, Button, DialogActions, Stack, Typography } from "@mui/material";
 import CustomButton from "../CustomButton";
 import Input from "../Input";
+import { styles } from "../../../constants/constant";
 
 const SportiveDocumentForm = ({ onSave, initialData = {}, onCancel }) => {
   const [documentName, setDocumentName] = useState(
@@ -13,6 +14,8 @@ const SportiveDocumentForm = ({ onSave, initialData = {}, onCancel }) => {
   const [documentFile, setDocumentFile] = useState(
     initialData.documentFile || ""
   );
+
+  const inputRef = useRef(null);
 
   const [error, setError] = useState({});
 
@@ -26,6 +29,10 @@ const SportiveDocumentForm = ({ onSave, initialData = {}, onCancel }) => {
       };
       reader.readAsDataURL(file);
     }
+  };
+
+  const handleClick = () => {
+    inputRef.current.click();
   };
 
   const handleError = (input, errorMessage) => {
@@ -59,7 +66,7 @@ const SportiveDocumentForm = ({ onSave, initialData = {}, onCancel }) => {
 
   return (
     <Box sx={{ display: "flex", flexDirection: "column", gap: 2 }}>
-      <Input
+      {/* <Input
         label="Document Name"
         placeholder="enter document name"
         value={documentName || ""}
@@ -67,7 +74,7 @@ const SportiveDocumentForm = ({ onSave, initialData = {}, onCancel }) => {
         required={true}
         onFocus={() => handleError("documentName", null)}
         onChange={(e) => setDocumentName(e.target.value)}
-      />
+      /> */}
       <Input
         label="Issue Date"
         name="issueDate"
@@ -79,7 +86,33 @@ const SportiveDocumentForm = ({ onSave, initialData = {}, onCancel }) => {
         onChange={(e) => setIssueDate(e.target.value)}
         InputLabelProps={{ shrink: true }}
       />
-      <input type="file" accept="application/pdf" onChange={handleFileChange} />
+      <Stack direction="row">
+        <input
+          type="file"
+          onChange={handleFileChange}
+          accept=".pdf,.docx"
+          style={{ display: "none" }}
+          ref={inputRef}
+        />
+        <CustomButton sx={{ margin: 0 }} onClick={handleClick}>
+          Upload File
+        </CustomButton>
+        <label
+          style={{
+            margin: "1vh",
+            color: styles.textGreen,
+            fontFamily: styles.fontFamily,
+          }}
+        >
+          {documentName}
+        </label>
+      </Stack>
+      {/* <input
+        type="file"
+        accept="application/pdf"
+        onChange={handleFileChange}
+        fileName={documentName || ""}
+      /> */}
 
       <DialogActions>
         <CustomButton onClick={handleSubmit}>Save</CustomButton>
