@@ -90,6 +90,10 @@ const EmployeeGrid = () => {
     setDataForEdit(data);
     setShowForm(true);
   };
+  const handleBack = (data) => {
+    setDataForEdit(data);
+    setShowForm(false);
+  };
 
   const handleDelete = (data) => {
     const updatedData = rowData.filter((row) => row !== data);
@@ -107,7 +111,7 @@ const EmployeeGrid = () => {
   };
 
   const form = showForm ? (
-    <EmployeeForm data={dataForEdit} />
+    <EmployeeForm data={dataForEdit} onBack={() => handleBack()} />
   ) : (
     <>
       <CustomButton

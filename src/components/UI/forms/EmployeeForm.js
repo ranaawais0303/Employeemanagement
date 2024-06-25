@@ -23,7 +23,7 @@ import { useDispatch } from "react-redux";
 import { addEmployee } from "../../../reduxStore/employeeSlice";
 import SportiveDocumentForm from "./SportiveDocumentForm";
 
-const EmployeeForm = ({ data }) => {
+const EmployeeForm = ({ data, onBack }) => {
   console.log(data ? data : "", "data in form");
   const [personalInfo, setPersonalInfo] = useState(
     data ? data?.personalInfo : {}
@@ -151,6 +151,7 @@ const EmployeeForm = ({ data }) => {
     };
     console.log(dataDoc, "data before sending into add employee");
     dispatch(addEmployee(dataDoc));
+    onBack();
   };
 
   return (
@@ -164,6 +165,7 @@ const EmployeeForm = ({ data }) => {
             <Typography variant="h6">Personal Info</Typography>
             <Grid container direction="column" alignItems="left">
               <CustomButton
+                disabled={data?.readOnly}
                 onClick={() => handleDialogOpen("personal", personalInfo)}
               >
                 Edit Personal Information
@@ -195,7 +197,10 @@ const EmployeeForm = ({ data }) => {
         <Grid item xs={12} sm={6} md={4}>
           <Box sx={{ marginBottom: 2 }}>
             <Typography variant="h6">Education</Typography>
-            <CustomButton onClick={() => handleDialogOpen("education")}>
+            <CustomButton
+              disabled={data?.readOnly}
+              onClick={() => handleDialogOpen("education")}
+            >
               Add Education
             </CustomButton>
             <List>

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 import VisibilityOutlinedIcon from "@mui/icons-material/VisibilityOutlined";
 import EditIcon from "@mui/icons-material/Edit";
@@ -16,9 +16,10 @@ const MenuButtons = ({
   onEdit,
   onDelete,
   onSubmit,
-  handleViewPopupClose,
 }) => {
-  console.log(data, "here is the full data for edit case");
+  console.log(data, "here is the full data for edit case", menuAnchorEl);
+  const [iconName, setIconName] = useState([]);
+
   const MENU_ICONS = [
     {
       id: 1,
@@ -30,7 +31,7 @@ const MenuButtons = ({
       id: 2,
       name: "View",
       icon: <VisibilityOutlinedIcon style={styled} />,
-      onClick: handleViewPopupClose,
+      onClick: onEdit,
     },
     {
       id: 3,
@@ -46,41 +47,18 @@ const MenuButtons = ({
     },
   ];
 
+  const selectedIcons = () => {
+    if (data.readOnly) setIconName(MENU_ICONS.filter((icon) => icon.id !== 1));
+    else setIconName(MENU_ICONS.filter((icon) => icon.id !== 2));
+  };
+
+  useEffect(() => {
+    selectedIcons();
+  }, [open]);
+
   return (
-    <Menu
-      anchorEl={menuAnchorEl}
-      open={open}
-      onClose={onClose}
-      //   PaperProps={{
-      //     elevation: 0,
-      //     sx: {
-      //       overflow: "visible",
-      //       filter: "drop-shadow(1px 1px 3px rgba(0,0,0,0.09))",
-      //       mt: 1.5,
-      //       "& .MuiAvatar-root": {
-      //         width: 32,
-      //         height: 32,
-      //         ml: -0.5,
-      //         mr: 1,
-      //       },
-      //       "&:before": {
-      //         content: '""',
-      //         display: "block",
-      //         position: "absolute",
-      //         top: 0,
-      //         right: 14,
-      //         width: 10,
-      //         height: 10,
-      //         bgcolor: "background.paper",
-      //         transform: "translateY(-50%) rotate(45deg)",
-      //         zIndex: 0,
-      //       },
-      //     },
-      //   }}
-      transformOrigin={{ horizontal: "right", vertical: "top" }}
-      anchorOrigin={{ horizontal: "right", vertical: "top" }}
-    >
-      {MENU_ICONS.map(({ name, icon, onClick }) => (
+    <Menu anchorEl={menuAnchorEl} open={open} onClose={onClose}>
+      {iconName.map(({ name, icon, onClick }) => (
         <MenuItem
           key={name}
           style={{ fontFamily: styles.fontFamily, color: styles.textColor }}
