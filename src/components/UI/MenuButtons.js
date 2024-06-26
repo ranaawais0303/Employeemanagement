@@ -24,7 +24,7 @@ const MenuButtons = ({
       id: 1,
       name: "Edit",
       icon: <EditIcon style={styled} />,
-      onClick: onEdit,
+      onClick: onEdit && onEdit,
     },
     {
       id: 2,
@@ -47,7 +47,7 @@ const MenuButtons = ({
   ];
 
   const selectedIcons = () => {
-    if (data.readOnly) setIconName(MENU_ICONS.filter((icon) => icon.id !== 1));
+    if (data?.readOnly) setIconName(MENU_ICONS.filter((icon) => icon.id !== 1));
     else setIconName(MENU_ICONS.filter((icon) => icon.id !== 2));
   };
 

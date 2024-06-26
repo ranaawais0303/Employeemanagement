@@ -1,11 +1,9 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { id } from "../constants/constant";
-import { startTransition } from "react";
 
 const employeeSlice = createSlice({
   name: "employee",
   initialState: {
-    readOnly: localStorage.getItem("readOnly") || false,
     employeeData: JSON.parse(localStorage.getItem("empData")) || [],
   },
   reducers: {
@@ -25,8 +23,6 @@ const employeeSlice = createSlice({
       }
       state.employeeData = updatedEmployeeData;
       localStorage.setItem("empData", JSON.stringify(updatedEmployeeData));
-      // state.readOnly = true;
-      // localStorage.setItem("readOnly", true);
     },
 
     removeReadOnly: (state, action) => {
@@ -56,19 +52,6 @@ const employeeSlice = createSlice({
       }
       state.employeeData = updatedEmployeeData;
       localStorage.setItem("empData", JSON.stringify(updatedEmployeeData));
-    },
-
-    updateEmployee: (state, action) => {
-      //   const existingData = localStorage.getItem(localStorageKey);
-      //   const existingDataJSON = existingData ? JSON.parse(existingData) : {};
-      //   const { avatar, firstName, lastName } = action.payload;
-      //   const data = {
-      //     ...existingDataJSON,
-      //     avatar: avatar,
-      //     fullName: lastName + " " + firstName,
-      //   };
-      //   state.userData = data;
-      //   localStorage.setItem(localStorageKey, JSON.stringify(data));
     },
 
     removeEmployee: (state, action) => {
