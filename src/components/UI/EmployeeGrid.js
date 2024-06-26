@@ -7,10 +7,7 @@ import CustomButton from "./CustomButton";
 import AddIcon from "@mui/icons-material/Add";
 import { useDispatch, useSelector } from "react-redux";
 import EmployeeForm from "./forms/EmployeeForm";
-import { IconButton } from "@mui/material";
-import MoreVertOutlinedIcon from "@mui/icons-material/MoreVertOutlined";
-import MenuButtons from "./MenuButtons";
-import { addReadOnly, removeEmployee } from "../../reduxStore/employeeSlice";
+import { removeEmployee } from "../../reduxStore/employeeSlice";
 import DeleteConfirmationDialog from "../DeleteConfirmationDialog";
 import PopupMenu from "../PopupMenu";
 
@@ -20,9 +17,7 @@ const EmployeeGrid = () => {
   const [deleteData, setDeleteData] = useState(null);
   const [showDeleteDialog, setShowDeleteDialog] = useState(false);
   const { employeeData } = useSelector((store) => store.employee);
-  // const [selectedRowData, setSelectedRowData] = useState(null);
   const [rowData, setRowData] = useState(employeeData);
-  // const [anchorEl, setAnchorEl] = useState(null);
 
   const dispatch = useDispatch();
 
@@ -31,19 +26,10 @@ const EmployeeGrid = () => {
   }, [employeeData]);
 
   const handleBack = () => {
-    // setDataForEdit(data);
     setShowForm(false);
   };
 
-  // const handleClick = (event, data) => {
-  //   setAnchorEl(event.currentTarget);
-  //   setSelectedRowData(data);
-  // };
-
-  // const handleClose = () => {
-  //   setAnchorEl(null);
-  // };
-
+  //For open the add/Edit Form
   const handleAdd = () => {
     setShowForm(true);
   };
@@ -73,7 +59,6 @@ const EmployeeGrid = () => {
           style={{ width: "30px", height: "30px", borderRadius: "50%" }}
         />
       ),
-      // cellStyle: { textAlign: "center" },
     },
     { headerName: "Name", field: "personalInfo.name" },
     { headerName: "Email", field: "personalInfo.email" },
@@ -90,26 +75,6 @@ const EmployeeGrid = () => {
             setShowDeleteDialog={setShowDeleteDialog}
             setShowForm={setShowForm}
           />
-          // <>
-          //   <IconButton
-          //     aria-controls="simple-menu"
-          //     aria-haspopup="true"
-          //     onClick={(event) => handleClick(event, params.data)}
-          //   >
-          //     <MoreVertOutlinedIcon />
-          //   </IconButton>
-          //   {selectedRowData?.id === params.data.id && (
-          //     <MenuButtons
-          //       menuAnchorEl={anchorEl}
-          //       open={Boolean(anchorEl)}
-          //       onClose={handleClose}
-          //       data={selectedRowData}
-          //       onEdit={() => handleEdit(selectedRowData)}
-          //       onDelete={() => handleDelete(selectedRowData)}
-          //       onSubmit={() => handleSubmit(selectedRowData)}
-          //     />
-          //   )}
-          // </>
         );
       },
       cellStyle: { textAlign: "center" },
@@ -117,7 +82,7 @@ const EmployeeGrid = () => {
   ];
 
   const form = showForm ? (
-    <EmployeeForm data={dataForEdit} onBack={() => handleBack()} />
+    <EmployeeForm data={dataForEdit} onBack={handleBack} />
   ) : (
     <>
       <CustomButton
@@ -134,7 +99,6 @@ const EmployeeGrid = () => {
         }}
       >
         <AgGridReact
-          // autoSizeStrategy={autoSizeStrategy}
           rowData={rowData}
           columnDefs={columnDefs}
           defaultColDef={{ flex: 1 }}

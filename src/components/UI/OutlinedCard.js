@@ -6,7 +6,7 @@ const OutlinedCard = ({ children, ...props }) => (
   <Card
     variant="outlined"
     className=" drop-shadow-2xl m-4"
-    sx={{ borderRadius: "15px", minHeight: 400 }}
+    sx={{ borderRadius: "15px", overflow: "auto" }}
     {...props}
   >
     <CardContent>{children}</CardContent>

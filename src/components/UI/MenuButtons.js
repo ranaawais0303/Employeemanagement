@@ -44,11 +44,19 @@ const MenuButtons = ({
       icon: <Assignment style={styled} />,
       onClick: onSubmit,
     },
+    {
+      id: 5,
+      name: "Ready For Review",
+      icon: <Assignment style={styled} />,
+      onClick: "",
+    },
   ];
 
   const selectedIcons = () => {
-    if (data?.readOnly) setIconName(MENU_ICONS.filter((icon) => icon.id !== 1));
-    else setIconName(MENU_ICONS.filter((icon) => icon.id !== 2));
+    if (data?.readOnly)
+      setIconName(MENU_ICONS.filter((icon) => icon.id !== 1 && icon.id !== 4));
+    else
+      setIconName(MENU_ICONS.filter((icon) => icon.id !== 2 && icon.id !== 5));
   };
 
   useEffect(() => {

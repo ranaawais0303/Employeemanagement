@@ -1,7 +1,7 @@
 import React from "react";
-import AuthLayout from "./AuthLayout"; // Assuming correct path
-import Task1 from "../pages/Task1"; // Assuming correct path
-import Task2 from "../pages/Task2"; // Assuming correct path
+import AuthLayout from "./AuthLayout";
+import Task1 from "../pages/Task1";
+import Task2 from "../pages/Task2";
 import TabsWithRoutes from "../pages/TabsWithRoutes";
 
 const AuthRoutes = {
@@ -9,15 +9,15 @@ const AuthRoutes = {
   element: <AuthLayout />,
   children: [
     {
-      path: "/", // Default route within AuthLayout for tabs
+      path: "/",
       element: <TabsWithRoutes />,
       children: [
         {
-          path: "Task1", // Route for Task 1 content
+          path: "Task1",
           element: <Task1 />,
         },
         {
-          path: "Task2", // Route for Task 2 content
+          path: "Task2",
           element: <Task2 />,
         },
       ],

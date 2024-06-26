@@ -13,6 +13,7 @@ import {
   Grid,
   Stack,
 } from "@mui/material";
+import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import PersonalInfoForm from "./PersonalInfoForm";
 import EducationForm from "./EducationForm";
 import ExperienceForm from "./ExperienceForm";
@@ -23,6 +24,13 @@ import { useDispatch } from "react-redux";
 import { addEmployee } from "../../../reduxStore/employeeSlice";
 import SportiveDocumentForm from "./SportiveDocumentForm";
 import { styles } from "../../../constants/constant";
+import OutlinedCard from "../OutlinedCard";
+
+const titleStyle = {
+  color: styles.textColor,
+  // fontWeight: "bold",
+  fontFamily: styles.fontFamily,
+};
 
 const EmployeeForm = ({ data, onBack }) => {
   const [personalInfo, setPersonalInfo] = useState(
@@ -166,219 +174,280 @@ const EmployeeForm = ({ data, onBack }) => {
   };
 
   return (
-    <Box>
-      <Typography variant="h5" gutterBottom>
-        Employee Form
-      </Typography>
-      <Grid container spacing={2}>
-        <Grid item xs={12} sm={6} md={6}>
-          <Box sx={{ marginBottom: 2, borderRight: 1, padding: 2 }}>
-            <Typography variant="h6">Personal Info</Typography>
-            <Grid container direction="column" alignItems="left">
-              <CustomButton
-                disabled={data?.readOnly}
-                onClick={() => handleDialogOpen("personal", personalInfo)}
-              >
-                Edit Personal Information
-              </CustomButton>
-              {personalInfo.name && (
-                <Box sx={{ display: "flex", alignItems: "left", marginTop: 1 }}>
-                  <img
-                    src={imageUrl}
-                    alt="Profile"
-                    style={{
-                      width: "100px",
-                      height: "100px",
-                      borderRadius: "50%",
-                      marginRight: "10px",
-                    }}
-                  />
-                  <Typography>{personalInfo.name}</Typography>
-                </Box>
-              )}
-              <Stack direction="row">
-                <input
-                  type="file"
-                  onChange={handleImageChange}
-                  accept="image/*"
-                  style={{ display: "none" }}
-                  ref={inputRef}
-                />
+    <OutlinedCard>
+      <Box>
+        <Grid container direction="row">
+          <ArrowBackIcon
+            onClick={onBack}
+            sx={{ color: "#006400", marginTop: "5px" }}
+          />
+          <Typography
+            variant="h5"
+            sx={{ color: "#006400", fontWeight: "bold" }}
+            gutterBottom
+          >
+            Employee Form
+          </Typography>
+        </Grid>
+        <hr style={{ color: "#006400", backgroundColor: "#006400" }} />
+        <Grid container spacing={2}>
+          <Grid item xs={12} sm={6} md={6}>
+            <OutlinedCard>
+              <Box sx={{ marginBottom: 2, padding: 2 }}>
+                <Typography variant="h5" sx={titleStyle}>
+                  Personal Info
+                </Typography>
+                <Grid container direction="column" alignItems="left">
+                  <CustomButton
+                    sx={{ textAlign: "right" }}
+                    disabled={data?.readOnly}
+                    onClick={() => handleDialogOpen("personal", personalInfo)}
+                  >
+                    Edit Personal Information
+                  </CustomButton>
+                  {personalInfo.name && (
+                    <Box
+                      sx={{
+                        display: "flex",
+                        marginTop: 1,
+                        justifyContent: "space-between",
+                      }}
+                    >
+                      <Grid>
+                        <Typography>{personalInfo.name}</Typography>
+                        <Typography>{personalInfo.email}</Typography>
+                        <Typography>{personalInfo.phone}</Typography>
+                      </Grid>
+                      <img
+                        src={imageUrl}
+                        alt="Profile"
+                        style={{
+                          width: "100px",
+                          height: "100px",
+                          borderRadius: "50%",
+                          marginRight: "10px",
+                        }}
+                      />
+                    </Box>
+                  )}
+                  <Stack
+                    direction="row"
+                    sx={{ textAlign: "right", justifyContent: "right" }}
+                  >
+                    <input
+                      type="file"
+                      onChange={handleImageChange}
+                      accept="image/*"
+                      style={{ display: "none" }}
+                      ref={inputRef}
+                    />
+                    <CustomButton
+                      disabled={data?.readOnly}
+                      // endIcon={<UploadFileIcon />}
+                      sx={{ margin: 0, marginTop: "2vh" }}
+                      onClick={handleClick}
+                    >
+                      Upload image
+                    </CustomButton>
+                    <label
+                      style={{
+                        margin: "1vh",
+                        marginTop: "3vh",
+                        color: styles.textGreen,
+                        fontFamily: styles.fontFamily,
+                      }}
+                    >
+                      {imageName}
+                    </label>
+                  </Stack>
+                </Grid>
+              </Box>
+            </OutlinedCard>
+          </Grid>
+          <Grid item xs={12} sm={6} md={6}>
+            <OutlinedCard>
+              <Box sx={{ marginBottom: 2 }}>
+                <Typography variant="h5" sx={titleStyle}>
+                  Education
+                </Typography>
                 <CustomButton
-                  // endIcon={<UploadFileIcon />}
-                  sx={{ margin: 0 }}
-                  onClick={handleClick}
+                  sx={{ textAlign: "right" }}
+                  disabled={data?.readOnly}
+                  onClick={() => handleDialogOpen("education")}
                 >
-                  Upload image
+                  Add Education
                 </CustomButton>
-                <label
-                  style={{
-                    margin: "1vh",
-                    color: styles.textGreen,
-                    fontFamily: styles.fontFamily,
-                  }}
+                <List>
+                  {educationList?.map((edu, index) => (
+                    <ListItem key={index}>
+                      <ListItemText
+                        primary={edu.degree}
+                        secondary={edu.institute}
+                      />
+                      <ListItemSecondaryAction>
+                        <IconButton
+                          disabled={data?.readOnly}
+                          edge="end"
+                          onClick={() =>
+                            handleDialogOpen("education", edu, index)
+                          }
+                        >
+                          <EditIcon />
+                        </IconButton>
+                        <IconButton
+                          disabled={data?.readOnly}
+                          edge="end"
+                          onClick={() => handleDelete("education", index)}
+                        >
+                          <DeleteIcon />
+                        </IconButton>
+                      </ListItemSecondaryAction>
+                    </ListItem>
+                  ))}
+                </List>
+              </Box>
+            </OutlinedCard>
+          </Grid>
+          <Grid item xs={12} sm={6} md={6}>
+            <OutlinedCard>
+              <Box sx={{ marginBottom: 2, padding: 2 }}>
+                <Typography variant="h5" sx={titleStyle}>
+                  Experience
+                </Typography>
+                <CustomButton
+                  disabled={data?.readOnly}
+                  sx={{ textAlign: "right" }}
+                  onClick={() => handleDialogOpen("experience")}
                 >
-                  {imageName}
-                </label>
-              </Stack>
-              {/* <input
-                type="file"
-                accept="image/*"
-                onChange={handleImageChange}
-                style={{ marginTop: "10px" }}
-              /> */}
-            </Grid>
-          </Box>
-        </Grid>
-        <Grid item xs={12} sm={6} md={6}>
-          <Box sx={{ marginBottom: 2 }}>
-            <Typography variant="h6">Education</Typography>
-            <CustomButton
-              disabled={data?.readOnly}
-              onClick={() => handleDialogOpen("education")}
-            >
-              Add Education
-            </CustomButton>
-            <List>
-              {educationList?.map((edu, index) => (
-                <ListItem key={index}>
-                  <ListItemText
-                    primary={edu.degree}
-                    secondary={edu.institute}
-                  />
-                  <ListItemSecondaryAction>
-                    <IconButton
-                      edge="end"
-                      onClick={() => handleDialogOpen("education", edu, index)}
-                    >
-                      <EditIcon />
-                    </IconButton>
-                    <IconButton
-                      edge="end"
-                      onClick={() => handleDelete("education", index)}
-                    >
-                      <DeleteIcon />
-                    </IconButton>
-                  </ListItemSecondaryAction>
-                </ListItem>
-              ))}
-            </List>
-          </Box>
-        </Grid>
-        <Grid item xs={12} sm={6} md={6}>
-          <Box sx={{ marginBottom: 2, padding: 2 }}>
-            <Typography variant="h6">Experience</Typography>
-            <CustomButton onClick={() => handleDialogOpen("experience")}>
-              Add Experience
-            </CustomButton>
-            <List>
-              {experienceList?.map((exp, index) => (
-                <ListItem key={index}>
-                  <ListItemText
-                    primary={exp.company}
-                    secondary={exp.designation}
-                  />
-                  <ListItemSecondaryAction>
-                    <IconButton
-                      edge="end"
-                      onClick={() => handleDialogOpen("experience", exp, index)}
-                    >
-                      <EditIcon />
-                    </IconButton>
-                    <IconButton
-                      edge="end"
-                      onClick={() => handleDelete("experience", index)}
-                    >
-                      <DeleteIcon />
-                    </IconButton>
-                  </ListItemSecondaryAction>
-                </ListItem>
-              ))}
-            </List>
-          </Box>
+                  Add Experience
+                </CustomButton>
+                <List>
+                  {experienceList?.map((exp, index) => (
+                    <ListItem key={index}>
+                      <ListItemText
+                        primary={exp.company}
+                        secondary={exp.designation}
+                      />
+                      <ListItemSecondaryAction>
+                        <IconButton
+                          disabled={data?.readOnly}
+                          edge="end"
+                          onClick={() =>
+                            handleDialogOpen("experience", exp, index)
+                          }
+                        >
+                          <EditIcon />
+                        </IconButton>
+                        <IconButton
+                          edge="end"
+                          disabled={data?.readOnly}
+                          onClick={() => handleDelete("experience", index)}
+                        >
+                          <DeleteIcon />
+                        </IconButton>
+                      </ListItemSecondaryAction>
+                    </ListItem>
+                  ))}
+                </List>
+              </Box>
+            </OutlinedCard>
+          </Grid>
+
+          <Grid item xs={12} sm={6} md={6}>
+            <OutlinedCard>
+              <Box sx={{ marginBottom: 2 }}>
+                <Typography variant="h5" sx={titleStyle}>
+                  Sportive Documents
+                </Typography>
+                <CustomButton
+                  disabled={data?.readOnly}
+                  sx={{ textAlign: "right" }}
+                  onClick={() => handleDialogOpen("sportive")}
+                >
+                  Add Sportive Document
+                </CustomButton>
+                <List>
+                  {sportiveDocuments?.map((doc, index) => (
+                    <ListItem key={index}>
+                      <ListItemText
+                        primary={doc.documentName}
+                        secondary={doc.issueDate}
+                      />
+                      <ListItemSecondaryAction>
+                        <IconButton
+                          disabled={data?.readOnly}
+                          edge="end"
+                          onClick={() =>
+                            handleDialogOpen("sportive", doc, index)
+                          }
+                        >
+                          <EditIcon />
+                        </IconButton>
+                        <IconButton
+                          disabled={data?.readOnly}
+                          edge="end"
+                          onClick={() => handleDelete("sportive", index)}
+                        >
+                          <DeleteIcon />
+                        </IconButton>
+                      </ListItemSecondaryAction>
+                    </ListItem>
+                  ))}
+                </List>
+              </Box>
+            </OutlinedCard>
+          </Grid>
         </Grid>
 
-        <Grid item xs={12} sm={6} md={6}>
-          <Box sx={{ marginBottom: 2 }}>
-            <Typography variant="h6">Sportive Documents</Typography>
-            <CustomButton onClick={() => handleDialogOpen("sportive")}>
-              Add Sportive Document
-            </CustomButton>
-            <List>
-              {sportiveDocuments?.map((doc, index) => (
-                <ListItem key={index}>
-                  <ListItemText
-                    primary={doc.documentName}
-                    secondary={doc.issueDate}
-                  />
-                  <ListItemSecondaryAction>
-                    <IconButton
-                      edge="end"
-                      onClick={() => handleDialogOpen("sportive", doc, index)}
-                    >
-                      <EditIcon />
-                    </IconButton>
-                    <IconButton
-                      edge="end"
-                      onClick={() => handleDelete("sportive", index)}
-                    >
-                      <DeleteIcon />
-                    </IconButton>
-                  </ListItemSecondaryAction>
-                </ListItem>
-              ))}
-            </List>
-          </Box>
-        </Grid>
-      </Grid>
+        <Dialog open={dialogOpen} onClose={handleDialogClose}>
+          <DialogContent sx={{ minWidth: "500px" }}>
+            {currentSection === "personal" && (
+              <PersonalInfoForm
+                onSave={handleSave}
+                initialData={currentData}
+                onCancel={handleDialogClose}
+              />
+            )}
+            {currentSection === "education" && (
+              <EducationForm
+                onSave={handleSave}
+                initialData={currentData}
+                onCancel={handleDialogClose}
+              />
+            )}
+            {currentSection === "experience" && (
+              <ExperienceForm
+                onSave={handleSave}
+                initialData={currentData}
+                onCancel={handleDialogClose}
+              />
+            )}
+            {currentSection === "sportive" && (
+              <SportiveDocumentForm
+                onSave={handleSave}
+                initialData={currentData}
+                onCancel={handleDialogClose}
+              />
+            )}
+          </DialogContent>
+        </Dialog>
 
-      <Dialog open={dialogOpen} onClose={handleDialogClose}>
-        <DialogContent sx={{ minWidth: "500px" }}>
-          {currentSection === "personal" && (
-            <PersonalInfoForm
-              onSave={handleSave}
-              initialData={currentData}
-              onCancel={handleDialogClose}
-            />
-          )}
-          {currentSection === "education" && (
-            <EducationForm
-              onSave={handleSave}
-              initialData={currentData}
-              onCancel={handleDialogClose}
-            />
-          )}
-          {currentSection === "experience" && (
-            <ExperienceForm
-              onSave={handleSave}
-              initialData={currentData}
-              onCancel={handleDialogClose}
-            />
-          )}
-          {currentSection === "sportive" && (
-            <SportiveDocumentForm
-              onSave={handleSave}
-              initialData={currentData}
-              onCancel={handleDialogClose}
-            />
-          )}
-        </DialogContent>
-      </Dialog>
-
-      <CustomButton
-        onClick={onSubmitForm}
-        disabled={
-          Object.keys(personalInfo).length === 0 ||
-          educationList.length < 1 ||
-          experienceList.length < 1 ||
-          sportiveDocuments.length < 1 ||
-          !imageUrl
-        }
-        sx={{ textAlign: "right", marginTop: 2 }}
-      >
-        Save Information
-      </CustomButton>
-    </Box>
+        <CustomButton
+          onClick={onSubmitForm}
+          disabled={
+            Object.keys(personalInfo).length === 0 ||
+            educationList.length < 1 ||
+            experienceList.length < 1 ||
+            sportiveDocuments.length < 1 ||
+            data?.readOnly ||
+            !imageUrl
+          }
+          sx={{ textAlign: "right", margin: "3vh" }}
+        >
+          Save Information
+        </CustomButton>
+      </Box>
+    </OutlinedCard>
   );
 };
 

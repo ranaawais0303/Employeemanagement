@@ -2,6 +2,8 @@ import React, { useState, useEffect } from "react";
 import { Box, Button, DialogActions } from "@mui/material";
 import PopupHeader from "../PopupHeader";
 import Input from "../Input";
+import PhoneInput from "react-phone-input-2";
+import "react-phone-input-2/lib/style.css";
 import CustomButton from "../CustomButton";
 import { validateEmail } from "../../../utils";
 
@@ -16,6 +18,10 @@ const PersonalInfoForm = ({ onSave, initialData, onCancel }) => {
   const handleChange = (e) => {
     const { name, value } = e.target;
     setPersonalInfo({ ...personalInfo, [name]: value });
+  };
+
+  const handlePhoneChange = (value) => {
+    setPersonalInfo({ ...personalInfo, phone: value });
   };
 
   const handleError = (input, errorMessage) => {
@@ -37,7 +43,7 @@ const PersonalInfoForm = ({ onSave, initialData, onCancel }) => {
       handleError("phone", "Phone number is required");
     }
     if (personalInfo.phone.length < 11) {
-      handleError("phone", "Password must be at least 11 characters");
+      handleError("phone", "Phone number must be at least 11 characters");
     }
     if (
       personalInfo.name &&
@@ -85,16 +91,20 @@ const PersonalInfoForm = ({ onSave, initialData, onCancel }) => {
         onChange={handleChange}
         style={{ margin: "0px" }}
       />
-      <Input
-        label="Phone"
-        name="phone"
-        placeholder="Enter phone number"
-        required={true}
-        value={personalInfo.phone || ""}
-        error={error.phone}
-        onFocus={() => handleError("phone", null)}
-        onChange={handleChange}
-      />
+      <Box sx={{ mt: 2, mb: 2 }}>
+        <PhoneInput
+          country={"us"} // Set default country
+          name="phone"
+          value={personalInfo.phone || ""}
+          onChange={handlePhoneChange}
+          onFocus={() => handleError("phone", null)}
+          inputStyle={{ width: "100%" }} // Adjust as per your needs
+          dropdownStyle={{ height: "300px" }} // Adjust the height of the dropdown
+        />
+        {error.phone && (
+          <div style={{ color: "red", marginTop: "5px" }}>{error.phone}</div>
+        )}
+      </Box>
       {/* Implement image upload if needed */}
       <DialogActions>
         <CustomButton onClick={handleSave}>Save</CustomButton>

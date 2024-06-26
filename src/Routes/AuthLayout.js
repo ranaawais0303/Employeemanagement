@@ -9,10 +9,6 @@ const AuthLayout = () => {
   const location = useLocation();
   console.log(location, "location");
 
-  //   if ((location.pathname == "/" || location.pathname == "Tabs") && auth) {
-  //     return <Navigate to="/Tabs" />;
-  //   }
-
   return <>{auth ? <Outlet /> : <Navigate to="/login" replace={true} />}</>;
 };
 

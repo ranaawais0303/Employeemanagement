@@ -24,16 +24,17 @@ const ExperienceForm = ({ onSave, initialData, onCancel }) => {
 
   const validateForm = () => {
     if (!experience.company) {
-      handleError("company", "company is required");
+      handleError("company", "Company is required");
     }
     if (!experience.designation) {
-      handleError("designation", " designation is required");
+      handleError("designation", " Designation is required");
     }
     if (!experience.startYear) {
-      handleError("startYear", "startYear Required");
+      handleError("startYear", "Start Date is Required");
     }
+
     if (!experience.endYear) {
-      handleError("endYear", "endYear is required");
+      handleError("endYear", "End Date is required");
     }
 
     if (
@@ -83,7 +84,7 @@ const ExperienceForm = ({ onSave, initialData, onCancel }) => {
         margin="dense"
       />
       <Input
-        label="Start Year"
+        label="Start Date"
         name="startYear"
         value={experience.startYear || ""}
         error={error.startYear}
@@ -92,10 +93,10 @@ const ExperienceForm = ({ onSave, initialData, onCancel }) => {
         onChange={handleChange}
         fullWidth
         margin="dense"
-        type="number"
+        type="date"
       />
       <Input
-        label="End Year"
+        label="End Date"
         name="endYear"
         value={experience.endYear || ""}
         error={error.endYear}
@@ -104,7 +105,7 @@ const ExperienceForm = ({ onSave, initialData, onCancel }) => {
         onChange={handleChange}
         fullWidth
         margin="dense"
-        type="number"
+        type="date"
       />
       <DialogActions>
         <CustomButton onClick={handleSave}>Save</CustomButton>

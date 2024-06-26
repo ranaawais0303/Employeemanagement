@@ -67,16 +67,6 @@ const LoginForm = () => {
     }
   };
 
-  // Render CalendarForm and Table if loggedIn is true
-  // if (loggedIn) {
-  //   return (
-  //     <div>
-  //       <CalendarForm handleAddRow={handleAddRow} />
-  //       <Table handleAddRow={handleAddRow} setIndex={setIndex} />
-  //     </div>
-  //   );
-  // }
-
   // Render login form if not logged in
   return (
     <CenteredWrapper>
@@ -94,7 +84,6 @@ const LoginForm = () => {
         >
           Login
         </Typography>
-        {/* <form onSubmit={handleSubmit}> */}
         <Input
           id="email-login"
           name="email"
@@ -133,14 +122,14 @@ const LoginForm = () => {
             {authError}
           </div>
         )}
-        <div style={{ textAlign: "right", marginRight: 35, marginTop: 5 }}>
+        <div style={{ textAlign: "right", marginRight: 6, marginTop: 5 }}>
           Forgot Password?
         </div>
 
         <CustomButton onClick={handleSubmit}>Login</CustomButton>
 
         <div
-          style={{ cursor: "pointer", color: "#14452F" }}
+          style={{ cursor: "pointer", color: "#14452F", textAlign: "center" }}
           onClick={() => {
             navigate("/signup");
             dispatch(clearError());
