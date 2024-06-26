@@ -6,6 +6,7 @@ import { styles } from "../constants/constant";
 import CustomButton from "../components/UI/CustomButton";
 import { useDispatch } from "react-redux";
 import { logOut } from "../reduxStore/authSlice";
+import LogoutIcon from "@mui/icons-material/Logout";
 
 const TabsWithRoutes = () => {
   const [value, setValue] = useState("Task1");
@@ -42,7 +43,11 @@ const TabsWithRoutes = () => {
             <Tab value="Task2" label="Task2" />
           </Tabs>
           <Box sx={{ flexGrow: 1 }} />
-          <CustomButton onClick={logoutHandler} sx={{ textAlign: "right" }}>
+          <CustomButton
+            endIcon={<LogoutIcon />}
+            onClick={logoutHandler}
+            sx={{ textAlign: "right" }}
+          >
             Logout
           </CustomButton>
         </Toolbar>

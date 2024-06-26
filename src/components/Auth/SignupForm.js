@@ -56,10 +56,14 @@ const SignupForm = () => {
     return false;
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     if (validateForm()) {
-      dispatch(signupUser({ email, password }));
+      await dispatch(signupUser({ email, password }));
+      if (!authError) {
+        navigate("/login");
+        dispatch(clearError());
+      }
     }
   };
 
@@ -79,7 +83,6 @@ const SignupForm = () => {
         >
           Signup
         </Typography>
-        {/* <form onSubmit={handleSubmit}> */}
         <Input
           id="email-login"
           name="email"
@@ -127,30 +130,12 @@ const SignupForm = () => {
           changehandler={(e) => setUsername(e.target.value)}
           fullWidth
         />
-        {/* <TextInput
-            label="Email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            error={formErrors.email}
-          /> */}
-        {/* <PasswordInput
-            label="Password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            error={formErrors.password}
-          /> */}
-
-        {/* <TextInput
-            label="username"
-            value={username}
-            onChange={(e) => setUsername(e.target.value)}
-            error={formErrors.username}
-          /> */}
+        {authError && (
+          <div style={{ color: "red", textAlign: "center" }}>{authError}</div>
+        )}
         <CustomButton onClick={handleSubmit}>Signup</CustomButton>
-        {authError && <div className="error-text">{authError}</div>}
-        {/* </form> */}
         <div
-          style={{ cursor: "pointer", color: "#14452F" }}
+          style={{ cursor: "pointer", color: "#14452F", textAlign: "center" }}
           onClick={() => {
             navigate("/login");
             dispatch(clearError());

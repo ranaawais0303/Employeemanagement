@@ -26,11 +26,13 @@ const EmployeeGrid = () => {
   }, [employeeData]);
 
   const handleBack = () => {
+    setDataForEdit(null);
     setShowForm(false);
   };
 
   //For open the add/Edit Form
   const handleAdd = () => {
+    setDataForEdit(null);
     setShowForm(true);
   };
 

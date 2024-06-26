@@ -98,14 +98,13 @@ const PersonalInfoForm = ({ onSave, initialData, onCancel }) => {
           value={personalInfo.phone || ""}
           onChange={handlePhoneChange}
           onFocus={() => handleError("phone", null)}
-          inputStyle={{ width: "100%" }} // Adjust as per your needs
-          dropdownStyle={{ height: "300px" }} // Adjust the height of the dropdown
+          inputStyle={{ width: "100%" }}
+          dropdownStyle={{ height: "300px" }}
         />
         {error.phone && (
           <div style={{ color: "red", marginTop: "5px" }}>{error.phone}</div>
         )}
       </Box>
-      {/* Implement image upload if needed */}
       <DialogActions>
         <CustomButton onClick={handleSave}>Save</CustomButton>
         <Button onClick={onCancel} color="primary">

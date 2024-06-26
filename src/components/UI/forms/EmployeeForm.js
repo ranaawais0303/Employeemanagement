@@ -25,6 +25,9 @@ import { addEmployee } from "../../../reduxStore/employeeSlice";
 import SportiveDocumentForm from "./SportiveDocumentForm";
 import { styles } from "../../../constants/constant";
 import OutlinedCard from "../OutlinedCard";
+import UploadIcon from "@mui/icons-material/Upload";
+import AddIcon from "@mui/icons-material/Add";
+import SaveIcon from "@mui/icons-material/Save";
 
 const titleStyle = {
   color: styles.textColor,
@@ -37,7 +40,7 @@ const EmployeeForm = ({ data, onBack }) => {
     data ? data?.personalInfo : {}
   );
   const [imageName, setImageName] = useState(
-    data ? data?.imageName : "No image selected"
+    data ? data?.personalInfo.imageName : "No image selected"
   );
   const [educationList, setEducationList] = useState(
     data ? data?.educationList : []
@@ -57,31 +60,16 @@ const EmployeeForm = ({ data, onBack }) => {
 
   const dispatch = useDispatch();
 
-  // Load data from localStorage
   useEffect(() => {
-    const savedData =
-      JSON.parse(localStorage.getItem("employeeFormData")) || {};
-    setPersonalInfo(savedData.personalInfo || {});
-    setEducationList(savedData.educationList || []);
-    setExperienceList(savedData.experienceList || []);
-    setSportiveDocuments(savedData.sportiveDocuments || []);
-
-    if (savedData.personalInfo?.image) {
-      setImageUrl(savedData.personalInfo.image);
-      setImageName(savedData.personalInfo.imageName);
+    if (data) {
+      setPersonalInfo(data ? data?.personalInfo : {});
+      setEducationList(data ? data?.educationList : []);
+      setExperienceList(data ? data?.experienceList : []);
+      setSportiveDocuments(data ? data?.sportiveDocuments : []);
+      setImageUrl(data ? data?.personalInfo?.image : "");
+      setImageName(data ? data?.personalInfo?.imageName : "");
     }
-  }, []);
-
-  // Save data to localStorage
-  useEffect(() => {
-    const data = {
-      personalInfo,
-      educationList,
-      experienceList,
-      sportiveDocuments,
-    };
-    localStorage.setItem("employeeFormData", JSON.stringify(data));
-  }, [personalInfo, educationList, experienceList, sportiveDocuments]);
+  }, [data]);
 
   const handleDialogOpen = (section, data = {}, index = null) => {
     setCurrentSection(section);
@@ -194,17 +182,24 @@ const EmployeeForm = ({ data, onBack }) => {
           <Grid item xs={12} sm={6} md={6}>
             <OutlinedCard>
               <Box sx={{ marginBottom: 2, padding: 2 }}>
-                <Typography variant="h5" sx={titleStyle}>
-                  Personal Info
-                </Typography>
-                <Grid container direction="column" alignItems="left">
+                <Grid
+                  container
+                  direction="row"
+                  alignItems="center"
+                  justifyContent="space-between"
+                >
+                  <Typography variant="h5" sx={titleStyle}>
+                    Personal Info
+                  </Typography>
                   <CustomButton
-                    sx={{ textAlign: "right" }}
+                    endIcon={<EditIcon />}
                     disabled={data?.readOnly}
                     onClick={() => handleDialogOpen("personal", personalInfo)}
                   >
                     Edit Personal Information
                   </CustomButton>
+                </Grid>
+                <Grid container direction="column" alignItems="left">
                   {personalInfo.name && (
                     <Box
                       sx={{
@@ -241,14 +236,6 @@ const EmployeeForm = ({ data, onBack }) => {
                       style={{ display: "none" }}
                       ref={inputRef}
                     />
-                    <CustomButton
-                      disabled={data?.readOnly}
-                      // endIcon={<UploadFileIcon />}
-                      sx={{ margin: 0, marginTop: "2vh" }}
-                      onClick={handleClick}
-                    >
-                      Upload image
-                    </CustomButton>
                     <label
                       style={{
                         margin: "1vh",
@@ -259,6 +246,14 @@ const EmployeeForm = ({ data, onBack }) => {
                     >
                       {imageName}
                     </label>
+                    <CustomButton
+                      disabled={data?.readOnly}
+                      endIcon={<UploadIcon />}
+                      sx={{ margin: 0, marginTop: "2vh" }}
+                      onClick={handleClick}
+                    >
+                      Upload image
+                    </CustomButton>
                   </Stack>
                 </Grid>
               </Box>
@@ -267,16 +262,24 @@ const EmployeeForm = ({ data, onBack }) => {
           <Grid item xs={12} sm={6} md={6}>
             <OutlinedCard>
               <Box sx={{ marginBottom: 2 }}>
-                <Typography variant="h5" sx={titleStyle}>
-                  Education
-                </Typography>
-                <CustomButton
-                  sx={{ textAlign: "right" }}
-                  disabled={data?.readOnly}
-                  onClick={() => handleDialogOpen("education")}
+                <Grid
+                  container
+                  direction="row"
+                  alignItems="center"
+                  justifyContent="space-between"
                 >
-                  Add Education
-                </CustomButton>
+                  <Typography variant="h5" sx={titleStyle}>
+                    Education
+                  </Typography>
+                  <CustomButton
+                    endIcon={<AddIcon />}
+                    sx={{ textAlign: "right" }}
+                    disabled={data?.readOnly}
+                    onClick={() => handleDialogOpen("education")}
+                  >
+                    Add Education
+                  </CustomButton>
+                </Grid>
                 <List>
                   {educationList?.map((edu, index) => (
                     <ListItem key={index}>
@@ -292,14 +295,14 @@ const EmployeeForm = ({ data, onBack }) => {
                             handleDialogOpen("education", edu, index)
                           }
                         >
-                          <EditIcon />
+                          <EditIcon color="primary" />
                         </IconButton>
                         <IconButton
                           disabled={data?.readOnly}
                           edge="end"
                           onClick={() => handleDelete("education", index)}
                         >
-                          <DeleteIcon />
+                          <DeleteIcon color="error" />
                         </IconButton>
                       </ListItemSecondaryAction>
                     </ListItem>
@@ -311,16 +314,24 @@ const EmployeeForm = ({ data, onBack }) => {
           <Grid item xs={12} sm={6} md={6}>
             <OutlinedCard>
               <Box sx={{ marginBottom: 2, padding: 2 }}>
-                <Typography variant="h5" sx={titleStyle}>
-                  Experience
-                </Typography>
-                <CustomButton
-                  disabled={data?.readOnly}
-                  sx={{ textAlign: "right" }}
-                  onClick={() => handleDialogOpen("experience")}
+                <Grid
+                  container
+                  direction="row"
+                  alignItems="center"
+                  justifyContent="space-between"
                 >
-                  Add Experience
-                </CustomButton>
+                  <Typography variant="h5" sx={titleStyle}>
+                    Experience
+                  </Typography>
+                  <CustomButton
+                    endIcon={<AddIcon />}
+                    disabled={data?.readOnly}
+                    sx={{ textAlign: "right" }}
+                    onClick={() => handleDialogOpen("experience")}
+                  >
+                    Add Experience
+                  </CustomButton>
+                </Grid>
                 <List>
                   {experienceList?.map((exp, index) => (
                     <ListItem key={index}>
@@ -336,14 +347,14 @@ const EmployeeForm = ({ data, onBack }) => {
                             handleDialogOpen("experience", exp, index)
                           }
                         >
-                          <EditIcon />
+                          <EditIcon color="primary" />
                         </IconButton>
                         <IconButton
                           edge="end"
                           disabled={data?.readOnly}
                           onClick={() => handleDelete("experience", index)}
                         >
-                          <DeleteIcon />
+                          <DeleteIcon color="error" />
                         </IconButton>
                       </ListItemSecondaryAction>
                     </ListItem>
@@ -356,16 +367,24 @@ const EmployeeForm = ({ data, onBack }) => {
           <Grid item xs={12} sm={6} md={6}>
             <OutlinedCard>
               <Box sx={{ marginBottom: 2 }}>
-                <Typography variant="h5" sx={titleStyle}>
-                  Sportive Documents
-                </Typography>
-                <CustomButton
-                  disabled={data?.readOnly}
-                  sx={{ textAlign: "right" }}
-                  onClick={() => handleDialogOpen("sportive")}
+                <Grid
+                  container
+                  direction="row"
+                  alignItems="center"
+                  justifyContent="space-between"
                 >
-                  Add Sportive Document
-                </CustomButton>
+                  <Typography variant="h5" sx={titleStyle}>
+                    Sportive Documents
+                  </Typography>
+                  <CustomButton
+                    endIcon={<AddIcon />}
+                    disabled={data?.readOnly}
+                    sx={{ textAlign: "right" }}
+                    onClick={() => handleDialogOpen("sportive")}
+                  >
+                    Add Sportive Document
+                  </CustomButton>
+                </Grid>
                 <List>
                   {sportiveDocuments?.map((doc, index) => (
                     <ListItem key={index}>
@@ -381,14 +400,14 @@ const EmployeeForm = ({ data, onBack }) => {
                             handleDialogOpen("sportive", doc, index)
                           }
                         >
-                          <EditIcon />
+                          <EditIcon color="primary" />
                         </IconButton>
                         <IconButton
                           disabled={data?.readOnly}
                           edge="end"
                           onClick={() => handleDelete("sportive", index)}
                         >
-                          <DeleteIcon />
+                          <DeleteIcon color="error" />
                         </IconButton>
                       </ListItemSecondaryAction>
                     </ListItem>
@@ -433,6 +452,7 @@ const EmployeeForm = ({ data, onBack }) => {
         </Dialog>
 
         <CustomButton
+          endIcon={<SaveIcon />}
           onClick={onSubmitForm}
           disabled={
             Object.keys(personalInfo).length === 0 ||
