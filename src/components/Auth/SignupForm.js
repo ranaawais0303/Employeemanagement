@@ -56,14 +56,16 @@ const SignupForm = () => {
     return false;
   };
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = (e) => {
     e.preventDefault();
     if (validateForm()) {
-      await dispatch(signupUser({ email, password }));
-      if (!authError) {
-        navigate("/login");
-        dispatch(clearError());
-      }
+      dispatch(signupUser({ email, password }));
+      setTimeout(() => {
+        if (!authError) {
+          navigate("/login");
+          dispatch(clearError());
+        }
+      }, [2000]);
     }
   };
 

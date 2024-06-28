@@ -66,15 +66,6 @@ const SportiveDocumentForm = ({ onSave, initialData = {}, onCancel }) => {
 
   return (
     <Box sx={{ display: "flex", flexDirection: "column", gap: 2 }}>
-      {/* <Input
-        label="Document Name"
-        placeholder="enter document name"
-        value={documentName || ""}
-        error={error.documentName}
-        required={true}
-        onFocus={() => handleError("documentName", null)}
-        onChange={(e) => setDocumentName(e.target.value)}
-      /> */}
       <Input
         label="Issue Date"
         name="issueDate"
@@ -107,12 +98,6 @@ const SportiveDocumentForm = ({ onSave, initialData = {}, onCancel }) => {
           {documentName}
         </label>
       </Stack>
-      {/* <input
-        type="file"
-        accept="application/pdf"
-        onChange={handleFileChange}
-        fileName={documentName || ""}
-      /> */}
 
       <DialogActions>
         <CustomButton onClick={handleSubmit}>Save</CustomButton>

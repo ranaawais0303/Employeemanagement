@@ -1,4 +1,3 @@
-// src/components/TextInput.js
 import React from "react";
 import "../components/Auth/AuthForm.css";
 

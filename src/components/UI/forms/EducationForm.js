@@ -1,4 +1,3 @@
-// src/components/EducationForm.jsx
 import React, { useState, useEffect } from "react";
 import { Box, Button, DialogActions } from "@mui/material";
 import PopupHeader from "../PopupHeader";
@@ -7,7 +6,6 @@ import Input from "../Input";
 
 const EducationForm = ({ onSave, initialData, onCancel }) => {
   const [education, setEducation] = useState(initialData);
-
   const [error, setError] = useState({});
 
   useEffect(() => {
@@ -84,6 +82,7 @@ const EducationForm = ({ onSave, initialData, onCancel }) => {
         margin="dense"
         required={true}
       />
+
       <Input
         label="Start Date"
         name="startDate"

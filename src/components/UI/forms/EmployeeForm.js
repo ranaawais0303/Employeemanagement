@@ -31,11 +31,11 @@ import SaveIcon from "@mui/icons-material/Save";
 
 const titleStyle = {
   color: styles.textColor,
-  // fontWeight: "bold",
   fontFamily: styles.fontFamily,
 };
 
 const EmployeeForm = ({ data, onBack }) => {
+  //states
   const [personalInfo, setPersonalInfo] = useState(
     data ? data?.personalInfo : {}
   );
@@ -71,6 +71,7 @@ const EmployeeForm = ({ data, onBack }) => {
     }
   }, [data]);
 
+  //it opens the dialog and set the current section according to data
   const handleDialogOpen = (section, data = {}, index = null) => {
     setCurrentSection(section);
     setCurrentData(data);
@@ -84,6 +85,7 @@ const EmployeeForm = ({ data, onBack }) => {
     setEditIndex(null);
   };
 
+  //it add the data to the form according to the selected section
   const handleSave = (data) => {
     if (currentSection === "personal") {
       setPersonalInfo(data);
@@ -115,6 +117,7 @@ const EmployeeForm = ({ data, onBack }) => {
     handleDialogClose();
   };
 
+  // delete according to the section data
   const handleDelete = (section, index) => {
     if (section === "education") {
       setEducationList((prev) => prev.filter((_, i) => i !== index));

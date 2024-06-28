@@ -1,4 +1,3 @@
-// src/components/PasswordInput.js
 import React from "react";
 import "../components/Auth/AuthForm.css";
 const PasswordInput = ({ label, value, onChange, error }) => {
