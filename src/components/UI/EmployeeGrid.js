@@ -65,6 +65,7 @@ const EmployeeGrid = () => {
     { headerName: "Name", field: "personalInfo.name" },
     { headerName: "Email", field: "personalInfo.email" },
     { headerName: "Phone Number", field: "personalInfo.phone" },
+    { headerName: "Status", field: "status" },
     {
       headerName: "Actions",
       field: "actions",

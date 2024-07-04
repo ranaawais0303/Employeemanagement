@@ -2,7 +2,11 @@
 import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux"; // For Redux
 // import { signup, clearError } from "../../reduxStore/authSlice";
-import { clearError, signupUser } from "../../reduxStore/authSlice";
+import {
+  clearError,
+  clearSuccess,
+  signupUser,
+} from "../../reduxStore/authSlice";
 // import TextInput from "../TextInput";
 // import PasswordInput from "../PasswordInput";
 // import "./AuthForm.css";
@@ -17,6 +21,7 @@ import { validateEmail } from "../../utils";
 
 const SignupForm = () => {
   const dispatch = useDispatch();
+  const { success } = useSelector((state) => state.auth);
   const authError = useSelector((state) => state.auth.error);
   const [email, setEmail] = useState("");
   const [showPassword, setShowPassword] = useState(false);
@@ -57,15 +62,11 @@ const SignupForm = () => {
   };
 
   const handleSubmit = (e) => {
+    dispatch(clearError());
+    dispatch(clearSuccess());
     e.preventDefault();
     if (validateForm()) {
       dispatch(signupUser({ email, password }));
-      setTimeout(() => {
-        if (!authError) {
-          navigate("/login");
-          dispatch(clearError());
-        }
-      }, [2000]);
     }
   };
 
@@ -134,6 +135,9 @@ const SignupForm = () => {
         />
         {authError && (
           <div style={{ color: "red", textAlign: "center" }}>{authError}</div>
+        )}
+        {success && (
+          <div style={{ color: "green", textAlign: "center" }}>{success}</div>
         )}
         <CustomButton onClick={handleSubmit}>Signup</CustomButton>
         <div

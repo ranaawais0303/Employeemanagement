@@ -19,9 +19,15 @@ import EducationForm from "./EducationForm";
 import ExperienceForm from "./ExperienceForm";
 import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
+import NotInterestedIcon from "@mui/icons-material/NotInterested";
+import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import CustomButton from "../CustomButton";
-import { useDispatch } from "react-redux";
-import { addEmployee } from "../../../reduxStore/employeeSlice";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  addEmployee,
+  isProcessed,
+  isRejected,
+} from "../../../reduxStore/employeeSlice";
 import SportiveDocumentForm from "./SportiveDocumentForm";
 import { styles } from "../../../constants/constant";
 import OutlinedCard from "../OutlinedCard";
@@ -56,6 +62,8 @@ const EmployeeForm = ({ data, onBack }) => {
   const [editIndex, setEditIndex] = useState(null);
   const [currentData, setCurrentData] = useState({});
   const [imageUrl, setImageUrl] = useState(data?.personalInfo?.image);
+  const { isAdmin } = useSelector((store) => store.auth);
+
   const inputRef = useRef(null);
 
   const dispatch = useDispatch();
@@ -157,6 +165,16 @@ const EmployeeForm = ({ data, onBack }) => {
       sportiveDocuments,
     };
     dispatch(addEmployee(dataDoc));
+    onBack();
+  };
+
+  const onAccept = () => {
+    dispatch(isProcessed(data?.id));
+    onBack();
+  };
+
+  const onReject = () => {
+    dispatch(isRejected(data?.id));
     onBack();
   };
 
@@ -465,10 +483,28 @@ const EmployeeForm = ({ data, onBack }) => {
             data?.readOnly ||
             !imageUrl
           }
-          sx={{ textAlign: "right", margin: "3vh" }}
+          sx={{ textAlign: "right", margin: "1vh" }}
         >
           Save Information
         </CustomButton>
+        {isAdmin && data?.readOnly && data?.status !== "Is Processed" && (
+          <Grid display="flex" justifyContent="right">
+            <CustomButton
+              endIcon={<NotInterestedIcon />}
+              onClick={onReject}
+              sx={{ textAlign: "right", margin: "1vh" }}
+            >
+              Reject
+            </CustomButton>
+            <CustomButton
+              endIcon={<CheckCircleIcon />}
+              onClick={onAccept}
+              sx={{ textAlign: "right", margin: "1vh" }}
+            >
+              Accept
+            </CustomButton>
+          </Grid>
+        )}
       </Box>
     </OutlinedCard>
   );

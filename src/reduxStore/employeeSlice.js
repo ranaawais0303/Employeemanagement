@@ -15,6 +15,46 @@ const employeeSlice = createSlice({
             return {
               ...action.payload,
               readOnly: true,
+              status: "In review",
+            };
+          } else {
+            return row;
+          }
+        });
+      }
+      state.employeeData = updatedEmployeeData;
+      localStorage.setItem("empData", JSON.stringify(updatedEmployeeData));
+    },
+
+    isProcessed: (state, action) => {
+      let updatedEmployeeData = state.employeeData;
+      console.log(action.payload);
+      if (action.payload) {
+        updatedEmployeeData = state.employeeData.map((row) => {
+          if (row.id === action.payload) {
+            return {
+              ...row,
+              status: "Is Processed",
+            };
+          } else {
+            return row;
+          }
+        });
+      }
+      state.employeeData = updatedEmployeeData;
+      localStorage.setItem("empData", JSON.stringify(updatedEmployeeData));
+    },
+
+    isRejected: (state, action) => {
+      let updatedEmployeeData = state.employeeData;
+      console.log(action.payload);
+      if (action.payload) {
+        updatedEmployeeData = state.employeeData.map((row) => {
+          if (row.id === action.payload) {
+            return {
+              ...row,
+              status: "Is Rejected",
+              readOnly: false,
             };
           } else {
             return row;
@@ -38,6 +78,7 @@ const employeeSlice = createSlice({
           if (row.id === action.payload.id) {
             return {
               ...action.payload,
+              status: "Submit for review",
             };
           } else {
             return row;
@@ -47,7 +88,7 @@ const employeeSlice = createSlice({
         const employeeId = id();
         updatedEmployeeData = [
           ...state.employeeData, // Spread existing employee data
-          { ...action.payload, id: employeeId }, // New employee object with destructured data
+          { ...action.payload, id: employeeId, status: "Submit for review" }, // New employee object with destructured data
         ];
       }
       state.employeeData = updatedEmployeeData;
@@ -68,6 +109,11 @@ const employeeSlice = createSlice({
   },
 });
 
-export const { addEmployee, removeEmployee, addReadOnly } =
-  employeeSlice.actions;
+export const {
+  addEmployee,
+  removeEmployee,
+  addReadOnly,
+  isProcessed,
+  isRejected,
+} = employeeSlice.actions;
 export default employeeSlice.reducer;

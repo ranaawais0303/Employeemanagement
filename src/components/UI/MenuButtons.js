@@ -5,6 +5,7 @@ import EditIcon from "@mui/icons-material/Edit";
 import { Assignment } from "@mui/icons-material";
 import { ListItemIcon, Menu, MenuItem } from "@mui/material";
 import { styles } from "../../constants/constant";
+import { useSelector } from "react-redux";
 
 const styled = { color: styles.textColor };
 
@@ -18,6 +19,9 @@ const MenuButtons = ({
   onSubmit,
 }) => {
   const [iconName, setIconName] = useState([]);
+
+  const { isAdmin } = useSelector((store) => store.auth);
+  console.log(data?.readOnly, isAdmin, "readonly and is admin");
 
   const MENU_ICONS = [
     {
@@ -50,14 +54,45 @@ const MenuButtons = ({
       icon: <Assignment style={styled} />,
       onClick: "",
     },
+    {
+      id: 6,
+      name: "Review",
+      icon: <VisibilityOutlinedIcon style={styled} />,
+      onClick: onEdit,
+    },
   ];
 
   const selectedIcons = () => {
-    if (data?.readOnly)
-      setIconName(MENU_ICONS.filter((icon) => icon.id !== 1 && icon.id !== 4));
-    else
-      setIconName(MENU_ICONS.filter((icon) => icon.id !== 2 && icon.id !== 5));
+    const filterIcons = (excludedIds) =>
+      MENU_ICONS.filter((icon) => !excludedIds.includes(icon.id));
+
+    if (data?.status === "Is Processed") {
+      setIconName(filterIcons([1, 3, 4, 5, 6]));
+      return;
+    }
+    if (data?.status === "Is Rejected") {
+      setIconName(filterIcons([2, 3, 4, 5, 6]));
+      return;
+    }
+
+    const excludedIds = data?.readOnly
+      ? isAdmin
+        ? [1, 2, 4, 5]
+        : [1, 4, 6]
+      : [2, 5, 6];
+
+    setIconName(filterIcons(excludedIds));
+
+    // if (data?.readOnly && !isAdmin) {
+    //   setIconName(filterIcons([1, 4, 6]));
+    // } else if (data?.readOnly && isAdmin) {
+    //   setIconName(filterIcons([1, 2, 4, 5]));
+    // } else {
+    //   setIconName(filterIcons([2, 5, 6]));
+    // }
   };
+
+  console.log(iconName, "icon name");
 
   useEffect(() => {
     selectedIcons();
@@ -69,6 +104,7 @@ const MenuButtons = ({
         <MenuItem
           key={name}
           style={{ fontFamily: styles.fontFamily, color: styles.textColor }}
+          disabled={name === "Ready For Review"}
           onClick={() => {
             onClick();
             onClose();
