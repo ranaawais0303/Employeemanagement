@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { AgGridReact } from "ag-grid-react";
 import "ag-grid-community/styles/ag-grid.css";
 import "ag-grid-community/styles/ag-theme-alpine.css";
+import "ag-grid-community/styles/ag-theme-quartz.css";
 import "./EmployeeGrid.css";
 import CustomButton from "./CustomButton";
 import AddIcon from "@mui/icons-material/Add";
@@ -95,12 +96,7 @@ const EmployeeGrid = () => {
       >
         Add
       </CustomButton>
-      <div
-        className="ag-theme-alpine"
-        style={{
-          width: "100%",
-        }}
-      >
+      <div className="ag-theme-quartz" style={{ height: 300 }}>
         <AgGridReact
           rowData={rowData}
           columnDefs={columnDefs}
